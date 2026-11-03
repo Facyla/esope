@@ -1,0 +1,139 @@
+.forms-compose-list-page {
+	padding: 10px;
+	background: var(--elgg-background-color-mild);
+	margin-bottom: 10px;
+	
+	&:hover > .forms-compose-edit-title {
+		display: inline-block;
+	}
+
+	> ul > li:last-child .elgg-field {
+		margin: 0;
+	}
+	
+	.ui-sortable-placeholder {
+		border: 2px dotted var(--elgg-border-color-mild);
+		background: transparent;
+		visibility: visible !important;
+	}
+}
+
+.forms-compose-list-section {
+	padding: 10px;
+	background: var(--elgg-background-color-strong);
+	margin: 10px;
+	
+	&:hover > .forms-compose-edit-title {
+		display: inline-block;
+	}
+
+	> .forms-compose-title-container {
+		color: var(--elgg-text-color-strong);
+	}
+	
+	> ul {
+		padding: 10px;
+	}
+}
+
+.forms-compose-add-section {
+	margin-left: 10px;
+}
+
+.forms-compose-edit-title {
+	display: none;
+}
+
+.forms-compose-title-container:hover .forms-compose-edit-title {
+	display: inline-block;
+}
+
+.forms-compose-list-field {
+	background: var(--elgg-background-color-mild);
+	margin-bottom: 5px;
+	padding: 5px;
+	
+	&.forms-compose-list-field-required > .elgg-required-indicator {
+		display: inline-block;
+	}
+	
+	&.ui-draggable-handle {
+		cursor: grab;
+	}
+	
+	> .elgg-required-indicator {
+		display: none;
+	}
+	
+	> .elgg-icon {
+		visibility: hidden;
+	}
+}
+
+.elgg-form-forms-compose .forms-compose-list-field:hover > .elgg-icon {
+	visibility: visible;
+}
+
+.forms-compose-fields-sidebar {
+	> .elgg-body {
+		background: var(--elgg-layout-background-color);
+		padding: 0.5rem;
+		
+		.forms-compose-fields {
+			> li {
+				background: var(--elgg-background-color-mild);
+				margin-bottom: 5px;
+			}
+		}
+	}
+}
+
+.forms-compose-edit-field {
+	padding: 1rem;
+	background: var(--elgg-layout-background-color);
+	display: none;
+}
+
+.forms-compose-conditional-section {
+	background: var(--elgg-background-color-strong);
+	margin-top: 5px;
+	padding: 10px;
+	
+	> .elgg-field > .elgg-field-label {
+		font-weight: normal;
+		font-size: 100%;
+	}
+	
+	.forms-compose-add-conditional-section {
+		display: none;
+	}
+}
+
+.forms-compose-toggle-element {
+	cursor: pointer;
+	margin-right: 4px;
+}
+
+.forms-compose-add-conditional-section,
+.forms-compose-field-edit,
+.forms-compose-delete,
+.forms-compose-edit-title {
+	cursor: pointer;
+	margin-left: 4px;
+}
+
+ul .forms-field-unsortable {
+	display: none;
+	
+	&:last-child {
+		display: block;
+	}
+}
+
+.forms-submissions:hover {
+	cursor: help;
+}
+
+.forms-submit-buttons > .elgg-field:last-child {
+	margin-left: auto;
+}

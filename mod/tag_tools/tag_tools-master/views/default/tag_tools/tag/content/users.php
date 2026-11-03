@@ -1,0 +1,87 @@
+<?php
+/**
+ * Show users with a lot of content created with the given tag
+ *
+ * @uses $vars['tag'] the tag being shown
+ */
+
+use Elgg\Database\Select;
+use Elgg\Database\Clauses\EntityWhereClause;
+use Elgg\Database\QueryOptions;
+use Elgg\Database\Clauses\AccessWhereClause;
+use Elgg\Database\Clauses\MetadataWhereClause;
+
+$tag = elgg_extract('tag', $vars);
+if (elgg_is_empty($tag)) {
+	return;
+}
+
+$tag = strtolower($tag);
+
+$tag_names = tag_tools_rules_get_tag_names();
+
+$entity_where = EntityWhereClause::factory(new QueryOptions([
+	'type_subtype_pairs' => elgg_entity_types_with_capability('searchable'),
+]));
+$access_where = new AccessWhereClause();
+$access_where->use_enabled_clause = false;
+
+$tag_where = new MetadataWhereClause();
+$tag_where->names = $tag_names;
+$tag_where->values = [$tag];
+$tag_where->case_sensitive = false;
+$tag_where->value_type = ELGG_VALUE_STRING;
+
+$banned_where = new MetadataWhereClause();
+$banned_where->names = 'banned';
+$banned_where->values = 'no';
+$banned_where->case_sensitive = false;
+$banned_where->value_type = ELGG_VALUE_STRING;
+
+$select = Select::fromTable('entities', 'e');
+$access_part = $access_where->prepare($select, 'e');
+
+$select->select('e.owner_guid')
+	->addSelect('count(*) as total')
+	->join('e', 'entities', 'eo', $select->compare('e.owner_guid', '=', 'eo.guid'))
+	->where($entity_where->prepare($select, 'e'))
+	->andWhere($tag_where->prepare($select, $select->joinMetadataTable('e')))
+	->andWhere($select->compare('eo.type', '=', 'user', ELGG_VALUE_STRING))
+	->andWhere($banned_where->prepare($select, $select->joinMetadataTable('eo')))
+	->groupBy('e.owner_guid')
+	->orderBy('total', 'desc')
+	->setMaxResults(3);
+
+if (!empty($access_part)) {
+	$select->andWhere($access_part);
+}
+
+$res = $select->execute()->fetchAllAssociative();
+if (empty($res)) {
+	return;
+}
+
+$guids = [];
+foreach ($res as $row) {
+	$guids[] = (int) $row['owner_guid'];
+}
+
+$users = elgg_get_entities([
+	'type' => 'user',
+	'guids' => $guids,
+]);
+$ordered_users = [];
+foreach ($users as $user) {
+	$key = array_search($user->guid, $guids);
+	$ordered_users[$key] = $user;
+}
+
+$content = elgg_view_entity_list($ordered_users, [
+	'full_view' => false,
+	'pagination' => false,
+]);
+
+echo elgg_view('tag_tools/tag/content/item', [
+	'title' => elgg_echo('tag_tools:tag:content:users'),
+	'content' => $content,
+]);

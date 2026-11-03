@@ -1,0 +1,182 @@
+Version history
+===============
+
+11.0.1 (2026-07-30):
+
+- several small chores/fixes
+
+11.0 (2026-05-29):
+
+- changed: updated for Elgg 7
+
+10.1 (2026-02-11):
+
+- added: extra field only on edit page to write some notes in
+- added: text field for output now available when composing a form
+- changed: form entity now uses fields service
+- changed: improved the layout of an email endpoint
+
+10.0 (2025-11-13):
+
+- changed: updated code to modern Elgg v6.3 possibilities
+- changed: updated minimal requirements to Elgg v6.3
+- fixed: PHP implicit null declaration
+
+9.1.1 (2025-08-20):
+
+- fixed: pass correct variables to conditional section constructor
+
+9.1 (2025-07-30):
+
+- added: form max file size
+- added: limit file size per input
+
+9.0.4 (2025-07-09):
+
+- several small chores/fixes
+
+9.0.3 (2025-05-28):
+
+- fixed: correctly parse form definition
+
+9.0.2 (2025-03-27):
+
+- fixed: use correct styling of icon only URLs
+
+9.0.1 (2024-12-11):
+
+- several small chores/fixes
+
+9.0 (2024-06-28):
+
+- changed: updated for Elgg 6
+
+8.1.4 (2024-05-15):
+
+- several small chores/fixes
+
+8.1.3 (2024-03-14):
+
+- several small chores/fixes
+
+8.1.2 (2023-11-30):
+
+- fixed: correctly report validity of form fields
+
+8.1.1 (2023-07-26):
+
+- fixed: buttons have a discernible text
+
+8.1 (2023-07-05):
+
+- added: database seeder
+- fixed: correctly format form value
+
+8.0 (2023-06-02):
+
+- added: form header image support
+- changed: conflict with Elgg < 5.0
+- changed: update for Elgg 5
+
+7.0 (2022-08-24):
+
+- changed: updated for Elgg 4.3
+
+6.0.1 (2022-07-12):
+
+- several small chores/fixes
+
+6.0 (2022-06-01):
+
+- changed: updated for Elgg 4.2
+
+5.0.1 (2022-03-30):
+
+- several small chores/fixes
+
+5.0 (2022-02-16):
+
+- changed: updated for Elgg 4.1 forms field alignment
+
+4.0 (2021-09-27):
+
+- changed: updated for Elgg 4
+
+3.1 (2020-06-09):
+
+- added: action to clear csv results
+- added: CSV endpoint for form results
+- added: form validation to prevent invalid forms from being used
+- fixed: do not prevent using enters in textareas
+
+3.0 (2020-05-26):
+
+- changed: added double submit prevention to forms
+- changed: increased minimal Elgg version to 3.3
+
+2.0.3 (2019-08-22):
+
+- several small chores/fixes
+
+2.0.2 (2019-07-11):
+
+- fixed: conditional sections not processed for multi value fields
+
+2.0.1 (2019-04-17):
+
+- several small chores/fixes
+
+2.0 (2019-03-27):
+
+- changed: form friendly title resource now uses a controller
+- changed: forms delete now uses generic entity delete
+- changed: minimal requirements updated to Elgg 3.0
+- changed: moved pagehandler function to route registration
+- changed: plugin initialisation via elgg-plugin and bootstrap
+- fixed: fatal error for supplying wrong e-mail recipient
+- fixed: history sidebar uses correct system_log function
+
+1.4 (2018-09-07):
+
+- added: option to prefill a field with a user attibute/profile field
+
+1.3.2 (2018-05-31):
+
+- fixed: only show generic thankyou text if there is no custom text
+
+1.3.1 (2018-05-17):
+
+- changed: when navigating form pages always scroll to top
+
+1.3 (2018-01-25):
+
+- added: keep count of the number of form submissions
+
+1.2 (2018-01-11):
+
+- added: option to automatically send a email copy to user filling in form
+
+1.1 (2017-11-29):
+
+- changed: required input/checkboxes now expect at least one checked
+- fix: clear custom error messages correctly for input/radios
+- fix: correctly reset customErrorMessages for checkboxes
+- fix: forced correct order of tab clicking to prevent order issues
+- fix: unwanted element attributes are leaking to html
+
+1.0.2 (2017-09-21):
+
+- fixed: conditional sections now working for radio and multiselect
+
+1.0.1 (2017-07-31):
+
+- changed: replaced page title with an hr in an email
+- fixed: cell alignment in email incorrect
+
+1.0 (2017-05-30):
+
+- removed: use of deprecated function
+
+1.0-beta.1 (2017-02-27):
+
+- first release

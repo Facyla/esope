@@ -1,0 +1,17 @@
+.entity-attachments {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-top: 0.5rem;
+	
+	> .elgg-item {
+		padding: 0.25rem 0.5rem;
+		border: 0;
+		border-radius: var(--elgg-border-radius-medium);
+		background: var(--elgg-background-color-soft);
+		
+		&:hover {
+			background: var(--elgg-background-color-mild);
+		}
+	}
+}

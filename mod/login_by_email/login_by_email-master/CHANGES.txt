@@ -1,0 +1,20 @@
+Version history
+===============
+
+3.1 (2026-08-19):
+
+- added: site administrators are automatically whitelisted
+
+3.0 (2026-05-29):
+
+- changed: updated for Elgg 7.0
+
+2.0 (2026-01-21):
+
+- added: plugin setting to allow/prevent classic login
+- added: whitelist of users who can use login by email
+- changed: updated for Elgg 6.3
+
+1.0 (2026-01-09):
+
+- initial release

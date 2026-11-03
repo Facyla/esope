@@ -1,0 +1,100 @@
+Version history
+===============
+
+11.0.2 (2026-05-29):
+
+- several small chores/fixes
+
+11.0.1 (2025-01-23):
+
+- several small chores/fixes
+
+11.0 (2024-06-28):
+
+- changed: updated for Elgg 6
+
+10.0 (2023-11-30):
+
+- changed: updated for Elgg 5.1
+
+9.0.1 (2023-07-26):
+
+- fixed: buttons have a discernible text
+
+9.0 (2023-06-02):
+
+- changed: conflict with Elgg < 5.0
+- changed: updated for Elgg 5
+
+8.0 (2022-08-24):
+
+- changed: updated for Elgg 4.3
+
+7.1.1 (2022-07-12):
+
+- several small chores/fixes
+
+7.1 (2022-06-01):
+
+- changed: replaced datetimepicker JS
+- fixed: page owner detection
+
+7.0 (2021-09-27):
+
+- changed: updated for Elgg 4.0
+
+6.1.1 (2021-01-05):
+
+- fixed: retain PUBLIC and LOGGED_IN access during content migration
+
+6.1 (2020-05-26):
+
+- added: pages to manage site owned content
+
+6.0 (2019-08-22):
+
+- changed: css loading now uses elgg_require_css
+- changed: increased minimal Elgg version to 3.1
+
+5.0 (2019-03-27):
+
+- changed: increased minimal Elgg version requirement to 3.0
+- changed: moved start.php to Bootstrap class
+- changed: rework for Elgg 3.0
+- changed: rewrite for Elgg 3.0
+- fixed: use correct slashes for include path
+
+4.0 (2017-05-30):
+
+- changed: updated requirement to Elgg 2.3
+
+3.0.1 (2017-01-26):
+
+- fixed: correctly update running migrateable entity
+
+3.0 (2016-11-18):
+
+- added: pagination on entities listing
+- added: support for discussions
+- added: support for pages plugin
+- added: support for thewire
+- changed: refactored migrate action into extendable classes
+- removed: questions code this is now handled in the questions plugin
+
+2.0 (2016-05-04):
+
+- added: support for group owners
+- added: support for questions
+- fixed: limit length of title
+- fixed: manage group content not allowed when setting is 'all users'
+- changed: rewrite for Elgg 1.9
+
+1.0.1 (2013-04-05):
+
+- fixed: wrong container_guid in some cases
+- fixed: last pages revision is correctly updated now
+- updated: better success/error messages to the user
+
+1.0 (2012-08-07):
+
+- first release

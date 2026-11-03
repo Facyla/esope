@@ -1,0 +1,15 @@
+<?php
+
+$guid = elgg_extract('guid', $vars);
+
+/** @var \Form $entity */
+$entity = elgg_entity_gatekeeper($guid, 'object', \Form::SUBTYPE);
+
+elgg_set_page_owner_guid($entity->container_guid);
+
+echo elgg_view_page(elgg_echo('forms:thankyou:title', [$entity->getDisplayName()]), [
+	'content' => elgg_view('form/thankyou', [
+		'entity' => $entity,
+	]),
+	'filter' => false,
+]);

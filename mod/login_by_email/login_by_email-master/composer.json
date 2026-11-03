@@ -1,0 +1,15 @@
+{
+	"name": "coldtrick/login_by_email",
+	"description": "Login to your Elgg website by a code sent to your e-mail address",
+	"homepage": "https://www.coldtrick.com",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/login_by_email",
+		"issues": "https://github.com/ColdTrick/login_by_email/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<7.0"
+	}
+}

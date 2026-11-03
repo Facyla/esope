@@ -1,0 +1,29 @@
+{
+	"name": "coldtrick/entity_tools",
+	"description": "Advanced editing of entities in your Elgg database",
+	"homepage": "https://www.coldtrick.com",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin", "database"],
+	"license": "GPL-2.0-only",
+	"support": {
+		"source": "https://github.com/ColdTrick/entity_tools",
+		"issues": "https://github.com/ColdTrick/entity_tools/issues"
+	},
+	"require": {
+		"npm-asset/jquery-datetimepicker": "~2.5.21"
+	},
+	"conflict": {
+		"elgg/elgg": "<6.0"
+	},
+	"config": {
+		"fxp-asset": {
+            "enabled": false
+		}
+	},
+	"repositories": [
+		{
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+		}
+	]
+}

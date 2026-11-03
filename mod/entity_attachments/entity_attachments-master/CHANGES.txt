@@ -1,0 +1,86 @@
+Version history
+===============
+
+7.2 (2026-07-30):
+
+- changed: styling of items in attachment listing
+
+7.1 (2026-05-29):
+
+- changed: moved add attachment menu item from module menu to entity menu
+
+7.0.2 (2026-04-17):
+
+- several small chores/fixes
+
+7.0.1 (2025-03-27):
+
+- several small chores/fixes
+
+7.0 (2024-06-28):
+
+- changed: updated for Elgg 6
+
+6.1.2 (2023-11-30):
+
+- several small chores/fixes
+
+6.1.1 (2023-07-26):
+
+- fixed: buttons have a discernible text
+
+6.1 (2023-07-05):
+
+- added: database seeder
+- fixed: cast entity_guid to int
+
+6.0 (2023-06-02):
+
+- changed: conflict with Elgg < 5.0
+- changed: updated for Elgg 5
+
+5.0.1 (2023-01-19):
+
+- changed: entity menu now behaves normally in summary metadata
+
+5.0 (2022-08-24):
+
+- changed: updated for Elgg 4.3
+
+4.0 (2022-06-01):
+
+- changed: updated for Elgg 4.2
+
+3.0 (2022-02-16):
+
+- changed: updated code for Elgg 4.1 capabilities system
+
+2.0 (2021-09-27):
+
+- changed: update for Elgg 4
+
+1.2.2 (2020-09-01):
+
+- fixed: prevent changing base entity attributes
+
+1.2.1 (2020-08-18):
+
+- fixed: styling and position of entity menu on smaller screens
+
+1.2 (2020-06-23):
+
+- changed: form fields are now required
+
+1.1.1 (2020-05-26):
+
+- fixed: double check if potential hidden container can not be edited
+
+1.1 (2019-08-07):
+
+- added: filters for linked entities
+
+1.0 (2019-03-27):
+
+- added: ability to add attachments to entities
+- added: dutch translation
+- added: group and user pickers

@@ -1,0 +1,243 @@
+Version history
+===============
+
+14.0.1 (2026-07-30):
+
+- several small chores/fixes
+
+14.0 (2026-05-29):
+
+- changed: updated for Elgg 7
+- removed: custom tag colors are no longer supported
+
+13.0 (2025-11-13):
+
+- changed: updated for Elgg 6.3
+- fixed: PHP implicit null declaration
+
+12.1 (2025-06-18):
+
+- added: more sorting options on admin tag search page
+- added: option to follow a tag from the notification settings page
+
+12.0.3 (2025-03-27):
+
+- fixed: use correct styling of icon only URLs
+
+12.0.2 (2024-12-11):
+
+- fixed: unable to manage new tags
+
+12.0.1 (2024-10-10):
+
+- fixed: notification should check for entity
+
+12.0 (2024-06-28):
+
+- changed: updated for Elgg 6.0
+
+11.0 (2023-11-30):
+
+- changed: updated for Elgg 5.1
+
+10.0.2 (2023-07-26):
+
+- fixed: buttons have a discernible text
+- fixed: correctly validate entity
+
+10.0.1 (2023-07-05):
+
+- fixed: hashtag matching regex
+
+10.0 (2023-06-02):
+
+- changed: conflict with Elgg < 5.0
+- changed: updated for Elgg 5
+
+9.0 (2022-08-24):
+
+- changed: updated for Elgg 4.3
+
+8.0.1 (2022-07-12):
+
+- several small chores/fixes
+
+8.0 (2022-06-01):
+
+- changed: updated for Elgg 4.2
+- fixed: missing language key
+
+7.0.1 (2022-03-11):
+
+- several small chores/fixes
+
+7.0 (2022-02-16):
+
+- added: plugin setting to configure the tag notifications
+- changed: moved tag notification handling to notification event handler
+- changed: updated code for Elgg 4.1 capabilities system
+- fixed: notification settings page owner detection
+
+6.1 (2021-11-17):
+
+- added: adds a whitelist autocomplete to tag inputs
+
+6.0 (2021-09-27):
+
+- changed: updated for Elgg 4
+- fixed: allow to set no notifications for a followed tag
+
+5.0.2 (2021-04-28):
+
+- fixed: mark entity as updated after apply/delete tag
+- fixed: replaced deprecated list_from_metadata function
+
+5.0.1 (2020-08-18):
+
+- fixed: added icons to tag notifications settings for smaller screens
+
+5.0 (2020-05-26):
+
+- changed: increased minimal Elgg version to 3.3
+- changed: layouts now all use the default layout
+- fixed: receiving tag notifications when setting doesn't allow
+- fixed: tags notification case sensitivity
+
+4.2 (2020-04-14):
+
+- added: option to export tag follower counts
+
+4.1.2 (2020-01-21):
+
+- fixed: no tag notifications are sent
+
+4.1.1 (2019-11-11):
+
+- fixed: correctly replace hastags in text
+
+4.1 (2019-10-15):
+
+- added: hashtag replacement in text with a link to the tag page
+
+4.0.1 (2019-09-04):
+
+- fixed: no longer show banned users in trending users
+
+4.0 (2019-08-22):
+
+- changed: moved hook and event registration to elgg-plugin.php
+- changed: replaced deprecated css loading of tagcolors
+- changed: updated minimal requirement to Elgg 3.1
+
+3.0.1 (2019-05-29):
+
+- fixed: allow follow/unfollow of uppercase tags
+
+3.0 (2019-03-27):
+
+- added: invalidate simplecache on definition edit
+- added: link to tag page
+- added: plugin setting to add/remove tab on activity page
+- added: setting color on tag
+- added: tag definition createion/edit
+- added: tag page sections
+- changed: minimal requirements set to Elgg 3.0
+- changed: now using elgg-plugin for initialisation of plugin
+- changed: updated code for Elgg 3
+- changed: updated tagit dependency
+- fixed: correct route registration
+- fixed: notification event validation
+- fixed: styling of input/tags
+
+2.2.1 (2018-07-26):
+
+- fixed: improved access to entity validation
+
+2.2 (2018-04-19):
+
+- changed: tag rules are now matched case insensitive
+
+2.1 (2018-01-11):
+
+- added: option to notify users of applied tag rules
+
+2.0 (2017-06-14):
+
+- added: admin pages to manage tags
+- added: admin searchable tags
+- added: apply tag rules on metadata create
+- added: apply type/subtype filter to search results
+- added: custom class for tag rules
+- added: links to create rules from search listing
+- added: pagination on search page
+- added: sorting of tags search results
+- added: suggestions for autocorrections
+- added: support for placeholder on tagit input
+- added: tag details view
+- added: tag rule create/edit/delete
+- changed: increased Elgg version requirement to 2.3
+
+1.5.2 (2017-03-24):
+
+- changed: input validation is now html5 compatible
+- fixed: tag input field now has a background color instead of transparent
+
+1.5.1 (2016-12-16):
+
+- several small chores/fixes
+
+1.5 (2016-10-06):
+
+- changed: moved (un)follow tag menu items to actual menu
+- fixed: set correct url on site notification about tags
+- fixed: zero strings being accidentally evaluated as non-existing values
+
+1.4 (2016-06-16):
+
+- added: different notification content for updated content items
+- added: upgrade script to mark all tags as sent
+- changed: no longer send tag notifications for users
+- fixed: keep tagcloud font styling intact
+- fixed: wrong tag in notification
+
+1.3.1 (2016-05-26):
+
+- fixed: do not increase font-size for ui-widget
+
+1.3 (2016-05-04):
+
+- added: tag notification offloading
+- changed: moved activity route to class callback
+- changed: moved filter menu hook to class callback
+- changed: moved notifications route to class handler
+- changed: moved pagesetup logic to correct plugin hook
+- changed: moved tags route to class handler
+- fixed: incorrect function name
+- fixed: invalid type check for entity access
+
+1.2 (2016-04-14):
+
+- added: now provides improved version of the tagcloud widget
+- added: spanish translation
+- fixed: correctly remove required state for autocomplete
+- fixed: use correct function to trigger a plugin hook
+
+1.1.1 (2016-01-11):
+
+- added: travis deployment support
+- fixed: tag should be url encoded when used in follow_tag links
+
+1.1 (2015-07-31):
+
+- added: composer support
+- added: plugin hook to limit outgoing type/subtype notifications
+- changed: AMD load most of the js
+- changed: form buildup to include tag tools description
+- fixed: set correct submit button class
+- fixed: issue when removing or saving tags on notification settings form where the tag has strange characters
+- fixed: php warning for create metadata event handler
+- fixed: sending notifications to users without access to the content
+
+1.0 (2014-11-17):
+
+- initial version

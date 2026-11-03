@@ -1,0 +1,344 @@
+<?php
+
+use ColdTrick\Forms\Definition;
+use ColdTrick\Forms\Endpoint;
+use Elgg\Exceptions\InvalidArgumentException;
+
+/**
+ * Form entity
+ *
+ * @property string $definition      JSON encoded form configuration
+ * @property string $endpoint        which endpoint type to use
+ * @property string $endpoint_config JSON encoded configuration for the endpoint
+ * @property string $friendly_url    friendly URL to the form
+ * @property int    $submitted_count the number of submitted forms
+ * @property string $thankyou        text to display after the submission of a form
+ * @property string $max_file_size   maximum total file size of all attachments (can use PHP ini shorthand (10K/5M/1G))
+ */
+class Form extends \ElggObject {
+	
+	const SUBTYPE = 'form';
+
+	protected \ColdTrick\Forms\Definition $definition_object;
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	protected function initializeAttributes() {
+		parent::initializeAttributes();
+		
+		$site = elgg_get_site_entity();
+		
+		$this->attributes['subtype'] = self::SUBTYPE;
+		$this->attributes['owner_guid'] = $site->guid;
+		$this->attributes['container_guid'] = $site->guid;
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function getURL(): string {
+		if (!empty($this->friendly_url)) {
+			return elgg_generate_url('view:object:form:friendly', [
+				'title' => $this->friendly_url,
+			]);
+		}
+		
+		return (string) elgg_generate_entity_url($this);
+	}
+	
+	/**
+	 * {@inheritdoc}
+	 */
+	public function __clone() {
+		parent::__clone();
+		
+		$this->attributes['time_created'] = null;
+		$this->title = elgg_echo('forms:entity:clone:title', [$this->title]);
+		$this->friendly_url = forms_generate_valid_friendly_url("{$this->friendly_url}-copy");
+		unset($this->submitted_count);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public static function getDefaultFields(): array {
+		$result = parent::getDefaultFields();
+
+		$result[] = [
+			'#type' => 'text',
+			'#label' => elgg_echo('title'),
+			'id' => 'form_title',
+			'name' => 'title',
+			'required' => true,
+		];
+
+		$result[] = [
+			'#type' => 'text',
+			'#label' => elgg_echo('forms:edit:friendly_url'),
+			'id' => 'friendly_url',
+			'name' => 'friendly_url',
+			'required' => true,
+		];
+
+		$result[] = [
+			'#type' => 'longtext',
+			'#label' => elgg_echo('description'),
+			'name' => 'description',
+		];
+
+		$result[] = [
+			'#type' => 'longtext',
+			'#label' => elgg_echo('forms:edit:thankyou'),
+			'#help' => elgg_echo('forms:edit:thankyou:help'),
+			'name' => 'thankyou',
+		];
+		
+		$result[] = [
+			'#type' => 'longtext',
+			'#label' => elgg_echo('forms:edit:admin_notes'),
+			'name' => 'admin_notes',
+		];
+
+		$result[] = [
+			'#type' => 'access',
+			'#label' => elgg_echo('access'),
+			'name' => 'access_id',
+			'entity_type' => 'object',
+			'entity_subtype' => self::SUBTYPE,
+			'entity_allows_comments' => false,
+		];
+
+		$post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
+
+		$result[] = [
+			'#type' => 'text',
+			'#label' => elgg_echo('forms:edit:max_file_size'),
+			'#help' => elgg_echo('forms:edit:max_file_size:help', [elgg_format_bytes($post_max_size)]),
+			'name' => 'max_file_size',
+			'pattern' => '^\d+[kmgKMG]?$',
+		];
+
+		return $result;
+	}
+	
+	/**
+	 * Check if this form has a saved definition
+	 *
+	 * @return bool
+	 */
+	public function hasDefinition(): bool {
+		return !empty($this->definition);
+	}
+	
+	/**
+	 * Get the form definition
+	 *
+	 * @return \ColdTrick\Forms\Definition
+	 *
+	 * @throws InvalidArgumentException
+	 */
+	public function getDefinition(): \ColdTrick\Forms\Definition {
+		if (!isset($this->definition_object)) {
+			$endpoints = forms_get_available_endpoints();
+			$endpoint = elgg_extract($this->endpoint, $endpoints);
+			$class = elgg_extract('definition', $endpoint, Definition::class);
+			
+			$definition = new $class($this);
+			if (!$definition instanceof Definition) {
+				throw new InvalidArgumentException("{$class} must extend " . Definition::class);
+			}
+			
+			$this->definition_object = $definition;
+		}
+		
+		return $this->definition_object;
+	}
+	
+	/**
+	 * Can the form be used / filled in
+	 *
+	 * @return bool
+	 */
+	public function isValid(): bool {
+		if (!$this->hasDefinition()) {
+			return false;
+		}
+		
+		return $this->getDefinition()->isValid();
+	}
+	
+	/**
+	 * Export the form definition
+	 *
+	 * @return null|string
+	 */
+	public function exportDefinition(): ?string {
+		if (!$this->hasDefinition()) {
+			return null;
+		}
+		
+		$definition = json_decode($this->definition, true);
+		$rules = $this->getDefinition()->getValidationRules();
+		
+		return json_encode([
+			'definition' => $definition,
+			'rules' => $rules,
+		], JSON_PRETTY_PRINT);
+	}
+	
+	/**
+	 * Import a form definition
+	 *
+	 * @param string $json_string json definition
+	 *
+	 * @return bool
+	 */
+	public function importDefinition(string $json_string): bool {
+		$data = @json_decode($json_string, true);
+		if (empty($data)) {
+			return false;
+		}
+		
+		$definition = elgg_extract('definition', $data);
+		if (empty($definition)) {
+			return false;
+		}
+		
+		$this->definition = json_encode($definition);
+		
+		$validation_rules = elgg_extract('rules', $data);
+		if (!empty($validation_rules)) {
+			// process validation rules
+			$current_validation_rules = forms_get_validation_rules();
+			
+			foreach ($validation_rules as $name => $rule) {
+				if (array_key_exists($name, $current_validation_rules)) {
+					// don't override already existing validation rules
+					continue;
+				}
+				
+				$current_validation_rules[$name] = $rule;
+			}
+			
+			forms_save_validation_rules($current_validation_rules);
+		}
+		
+		return true;
+	}
+	
+	/**
+	 * Get the endpoint configuration
+	 *
+	 * @param null|string $endpoint (optional) the endpoint to get the config for
+	 *
+	 * @return array
+	 */
+	public function getEndpointConfig(?string $endpoint = null): array {
+		if (empty($this->endpoint_config)) {
+			return [];
+		}
+		
+		$endpoint_config = json_decode($this->endpoint_config, true);
+		if (!isset($endpoint)) {
+			return $endpoint_config;
+		}
+		
+		return (array) elgg_extract($endpoint, $endpoint_config, []);
+	}
+	
+	/**
+	 * Get the form endpoint
+	 *
+	 * @return null|\ColdTrick\Forms\Endpoint
+	 */
+	public function getEndpoint(): ?\ColdTrick\Forms\Endpoint {
+		if (empty($this->endpoint)) {
+			return null;
+		}
+		
+		$endpoints = forms_get_available_endpoints();
+		
+		$endpoint_information = elgg_extract($this->endpoint, $endpoints);
+		if (empty($endpoint_information)) {
+			return null;
+		}
+		
+		$class = elgg_extract('class', $endpoint_information);
+		if (empty($class) || !class_exists($class)) {
+			return null;
+		}
+		
+		$endpoint_config = $this->getEndpointConfig($this->endpoint);
+		
+		try {
+			$endpoint = new $class($endpoint_config);
+		} catch (Exception $e) {
+			elgg_log("Form->getEndpoint() error: {$e->getMessage()}", \Psr\Log\LogLevel::ERROR);
+			return null;
+		}
+		
+		if (!$endpoint instanceof Endpoint) {
+			elgg_log('Form endpoint is not an instanceof \ColdTrick\Forms\Endpoint', 'ERROR');
+			return null;
+		}
+		
+		return $endpoint;
+	}
+	
+	/**
+	 * Log the submission of this form
+	 *
+	 * @return void
+	 */
+	public function logSubmission(): void {
+		$count = 0;
+		if (isset($this->submitted_count)) {
+			$count = (int) $this->submitted_count;
+		}
+		
+		$count++;
+		
+		$this->submitted_count = $count;
+	}
+	
+	/**
+	 * Get the maximum allowed total file size
+	 *
+	 * @return int|null
+	 */
+	public function getMaxFileSizeBytes(): ?int {
+		if (!$this->getDefinition()->supportsFileUpload()) {
+			return null;
+		}
+		
+		$post_max_size = elgg_get_ini_setting_in_bytes('post_max_size');
+		
+		if (empty($this->max_file_size)) {
+			return $post_max_size;
+		}
+		
+		$matches = [];
+		if (!preg_match_all('/^(\d+)([kmg]?)$/i', $this->max_file_size, $matches)) {
+			return null;
+		}
+		
+		$value = (int) $matches[1][0];
+		if (isset($matches[2][0])) {
+			switch (strtolower($matches[2][0])) {
+				case 'g':
+					$value *= 1024;
+				// gigabytes
+				case 'm':
+					$value *= 1024;
+				// megabytes
+				case 'k':
+					$value *= 1024;
+					// kilobytes
+					break;
+			}
+		}
+		
+		return min($post_max_size, $value);
+	}
+}
