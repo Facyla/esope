@@ -17,10 +17,11 @@ namespace Cake\Utility;
 
 use ArrayAccess;
 use Cake\Core\Exception\CakeException;
+use Collator;
 use InvalidArgumentException;
+use Throwable;
 use const SORT_ASC;
 use const SORT_DESC;
-use const SORT_LOCALE_STRING;
 use const SORT_NATURAL;
 use const SORT_NUMERIC;
 use const SORT_REGULAR;
@@ -122,7 +123,7 @@ class Hash
      */
     public static function extract(ArrayAccess|array $data, string $path): ArrayAccess|array
     {
-        if (!$path) {
+        if ($path === '') {
             return $data;
         }
 
@@ -292,11 +293,10 @@ class Hash
      * Insert $values into an array with the given $path. You can use
      * `{n}` and `{s}` elements to insert $data multiple times.
      *
-     * @template T of \ArrayAccess<array-key, mixed>|array
-     * @param T $data The data to insert into.
+     * @param \ArrayAccess<array-key, mixed>|array $data The data to insert into.
      * @param string $path The path to insert at.
      * @param mixed $values The values to insert.
-     * @return (T is array ? array : \ArrayAccess<array-key, mixed>) The data with $values inserted.
+     * @return ($data is array ? array : \ArrayAccess<array-key, mixed>) The data with $values inserted.
      * @link https://book.cakephp.org/5/en/core-libraries/hash.html#hash-insert
      * @psalm-taint-specialize Psalm tracks taint per call site instead of globally, preventing
      *   false positives where taint from one caller (e.g. ServerRequest::withData) bleeds into
@@ -403,10 +403,9 @@ class Hash
      * You can use `{n}` and `{s}` to remove multiple elements
      * from $data.
      *
-     * @template T of \ArrayAccess<array-key, mixed>|array
-     * @param T $data The data to operate on
+     * @param \ArrayAccess<array-key, mixed>|array $data The data to operate on
      * @param string $path A path expression to use to remove.
-     * @return (T is array ? array : \ArrayAccess<array-key, mixed>) The modified array.
+     * @return ($data is array ? array : \ArrayAccess<array-key, mixed>) The modified array.
      * @link https://book.cakephp.org/5/en/core-libraries/hash.html#hash-remove
      * @psalm-taint-specialize Psalm tracks taint per call site instead of globally, preventing
      *   false positives where taint from one caller (e.g. ServerRequest::withoutData) bleeds into
@@ -1057,21 +1056,60 @@ class Hash
         }
         $type = strtolower($type);
 
-        if ($type === 'numeric') {
-            $type = SORT_NUMERIC;
-        } elseif ($type === 'string') {
-            $type = SORT_STRING;
-        } elseif ($type === 'natural') {
-            $type = SORT_NATURAL;
-        } elseif ($type === 'locale') {
-            $type = SORT_LOCALE_STRING;
-        } else {
-            $type = SORT_REGULAR;
-        }
         if ($ignoreCase) {
             $values = array_map('mb_strtolower', $values);
         }
-        array_multisort($values, $dir, $type, $keys, $dir, $type);
+
+        if ($type === 'locale') {
+            // SORT_LOCALE_STRING was deprecated in PHP 8.6, use Collator instead.
+            $locale = setlocale(LC_COLLATE, '0') ?: '';
+            $locale = preg_replace('/[.@].*$/', '', $locale) ?: '';
+            if ($locale === 'C' || $locale === 'POSIX') {
+                $locale = '';
+            }
+            try {
+                $collator = new Collator($locale);
+            } catch (Throwable) {
+                $collator = new Collator('');
+            }
+            $pairs = array_map(
+                static fn(mixed $value, string|int $key): array => [$value, $key],
+                $values,
+                $keys,
+            );
+            usort(
+                $pairs,
+                static function (array $a, array $b) use ($collator): int {
+                    $result = $collator->compare((string)$a[0], (string)$b[0]);
+                    if ($result === false) {
+                        $result = 0;
+                    }
+                    if ($result !== 0) {
+                        return $result;
+                    }
+
+                    $result = $collator->compare((string)$a[1], (string)$b[1]);
+
+                    return $result === false ? 0 : $result;
+                },
+            );
+            if ($dir === SORT_DESC) {
+                $pairs = array_reverse($pairs);
+            }
+            $values = array_column($pairs, 0);
+            $keys = array_column($pairs, 1);
+        } else {
+            if ($type === 'numeric') {
+                $type = SORT_NUMERIC;
+            } elseif ($type === 'string') {
+                $type = SORT_STRING;
+            } elseif ($type === 'natural') {
+                $type = SORT_NATURAL;
+            } else {
+                $type = SORT_REGULAR;
+            }
+            array_multisort($values, $dir, $type, $keys, $dir, $type);
+        }
         $sorted = [];
         $keys = array_unique($keys);
 

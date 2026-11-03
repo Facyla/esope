@@ -1,0 +1,33 @@
+{
+    "name": "elgg/enumeration",
+    "description": "An enumeration implementation for PHP.",
+    "keywords": ["enum", "enumeration", "set", "class", "multiton", "type"],
+    "homepage": "https://github.com/eloquent/enumeration",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Erin Millard",
+            "email": "ezzatron@gmail.com",
+            "homepage": "http://ezzatron.com/"
+        }
+    ],
+    "require": {
+        "php": ">=7.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eloquent\\Enumeration\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "classmap": ["test/src"]
+    },
+    "config": {
+        "platform": {
+            "php": "7.1.99"
+        }
+    }
+}
