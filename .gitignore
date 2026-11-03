@@ -6,4 +6,4 @@
 !/elgg-config/README.rst
 /cache
 
-/vendor
+#/vendor
