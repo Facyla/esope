@@ -1,0 +1,21 @@
+{
+	"name": "elgg/theme_sandbox",
+	"type": "elgg-plugin",
+	"description": "Theme sandbox",
+	"license": "GPL-2.0-only",
+	"keywords": ["development", "theme"],
+	"homepage": "https://elgg.org",
+	"authors": [
+		{
+			"name": "Elgg Core Team",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"source": "https://github.com/elgg/elgg",
+		"issues": "https://github.com/elgg/elgg/issues"
+	},
+	"conflict": {
+		"elgg/elgg": "<5.0"
+	}
+}

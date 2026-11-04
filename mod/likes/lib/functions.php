@@ -1,0 +1,97 @@
+<?php
+use Elgg\Likes\DataService;
+
+/**
+ * Holds helper functions for likes plugin
+ */
+
+/**
+ * Get thumbs up menu item
+ *
+ * @param \ElggEntity $entity   Entity
+ * @param int         $priority Item priority
+ *
+ * @return ElggMenuItem
+ * @internal
+ */
+function _likes_menu_item(\ElggEntity $entity, int $priority = 500): \ElggMenuItem {
+	$is_liked = DataService::instance()->currentUserLikesEntity($entity->guid);
+
+	return \ElggMenuItem::factory([
+		'name' => 'likes',
+		'href' => false,
+		'icon' => 'thumbs-up',
+		'class' => $is_liked ? 'elgg-state-active' : '',
+		'text' => elgg_echo($is_liked ? 'likes:remove' : 'likes:likethis'),
+		'title' => elgg_echo($is_liked ? 'likes:remove' : 'likes:likethis'),
+		'data-likes-state' => $is_liked ? 'liked' : 'unliked',
+		'data-likes-guid' => $entity->guid,
+		'priority' => $priority,
+		'deps' => ['elgg/likes'],
+	]);
+}
+
+/**
+ * Get likes count menu item.
+ *
+ * @param \ElggEntity $entity   Entity
+ * @param int         $priority Item priority
+ *
+ * @return ElggMenuItem
+ * @internal
+ */
+function _likes_count_menu_item(\ElggEntity $entity, int $priority = 500): \ElggMenuItem {
+	$num_likes = DataService::instance()->getNumLikes($entity);
+
+	if ($num_likes == 1) {
+		$likes_string = elgg_echo('likes:userlikedthis', [$num_likes]);
+	} else {
+		$likes_string = elgg_echo('likes:userslikedthis', [$num_likes]);
+	}
+
+	$options = [
+		'name' => 'likes_count',
+		'text' => false,
+		'href' => false,
+		'badge' => $likes_string,
+		'data-likes-guid' => $entity->guid,
+		'item_class' => $num_likes ? '' : 'hidden',
+		'priority' => $priority,
+		'deps' => ['elgg/likes'],
+	];
+	
+	if ((bool) elgg_get_plugin_setting('details', 'likes') || $entity->canEdit()) {
+		$options['data-colorbox-opts'] = json_encode([
+			'maxHeight' => '85%',
+			'innerWidth' => '345px',
+			'href' => elgg_generate_url('ajax', [
+				'type' => 'view',
+				'segments' => 'likes/popup',
+				'guid' => $entity->guid,
+			]),
+		]);
+		$options['link_class'] = 'elgg-lightbox';
+		$options['title'] = elgg_echo('likes:see');
+	}
+	
+	return \ElggMenuItem::factory($options);
+}
+
+/**
+ * Get the count of how many people have liked an entity
+ *
+ * @param \ElggEntity $entity entity to get likes count for
+ *
+ * @return int
+ */
+function likes_count(\ElggEntity $entity): int {
+	$type = $entity->getType();
+	$params = ['entity' => $entity];
+	$number = elgg_trigger_event_results('likes:count', $type, $params, false);
+
+	if ($number !== false) {
+		return (int) $number;
+	}
+	
+	return $entity->countAnnotations('likes');
+}

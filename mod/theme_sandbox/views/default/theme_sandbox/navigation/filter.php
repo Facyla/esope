@@ -1,0 +1,43 @@
+<?php
+
+$items = [];
+
+foreach (['heart-regular', 'star-regular', 'bell-regular'] as $icon) {
+	$items[] = [
+		'name' => $icon,
+		'icon' => $icon,
+		'text' => 'Menu item',
+		'href' => false,
+		'child_menu' => [
+			'display' => 'dropdown',
+			'data-position' => json_encode([
+				'my' => 'left top',
+				'at' => 'left bottom+8px',
+				'collision' => 'fit fit',
+			]),
+		],
+		'selected' => $icon == 'heart-regular',
+	];
+}
+
+foreach (['A', 'B', 'C'] as $letter) {
+	$items[] = [
+		'name' => "bell-o:{$letter}",
+		'href' => false,
+		'text' => "Child {$letter}",
+		'parent_name' => $icon,
+	];
+
+	foreach (['AA', 'BB', 'CC'] as $subletter) {
+		$items[] = [
+			'name' => "bell-o:{$letter}:{$subletter}",
+			'href' => false,
+			'text' => "Child {$subletter}",
+			'parent_name' => "{$icon}:{$letter}",
+		];
+	}
+}
+
+echo elgg_view_menu('filter', [
+	'items' => $items,
+]);

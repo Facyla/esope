@@ -1,0 +1,18 @@
+.elgg-field.thewire-characters-wrapper {
+	margin-left: auto;
+	font-weight: bold;
+	
+	.thewire-characters-remaining-warning {
+		color: var(--elgg-state-danger-font-color);
+	}
+}
+
+.ck.ck-editor.elgg-ckeditor-thewire {
+	> .ck-editor__top {
+		display: none;
+	}
+	
+	> .ck-editor__main > .ck-editor__editable {
+		min-height: 40px;
+	}
+}
