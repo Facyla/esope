@@ -31,6 +31,7 @@ return array(
 	'pages:notify:subject' => "En ny sida: %s",
 
 	'pages:more' => 'Fler sidor',
+	'pages:none' => 'Inga sidor skapade än', // @todo remove in Elgg 7.0
 
 	/**
 	* River

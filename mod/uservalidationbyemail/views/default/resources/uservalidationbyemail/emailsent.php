@@ -10,6 +10,8 @@ if (!elgg_is_valid_email($email)) {
 
 $session->remove('emailsent');
 
+$shell = elgg_get_config('walled_garden') ? 'walled_garden' : 'default';
+
 $title = elgg_echo('uservalidationbyemail:emailsent', [$email]);
 
 echo elgg_view_page(strip_tags($title), [
@@ -18,4 +20,4 @@ echo elgg_view_page(strip_tags($title), [
 	'sidebar' => false,
 	'filter_id' => 'uservalidationbyemail',
 	'filter_value' => 'emailsent',
-], 'walled_garden');
+], $shell);

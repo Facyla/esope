@@ -76,6 +76,7 @@ return array(
 	/**
 	 * Access
 	 */
+	'groups:access:private' => 'Lukket - brugere skal inviteres',
 	'groups:access:public' => 'Åben - alle kan deltage',
 	'groups:access:group' => 'Kun for medlemmer',
 	'groups:closedgroup' => "Denne gruppe's medlemsskab er lukket.",

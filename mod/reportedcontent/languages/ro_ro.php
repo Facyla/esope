@@ -14,6 +14,7 @@ return array(
 	'reportedcontent' => 'Conținut raportat',
 	'reportedcontent:this' => 'Raportează asta',
 	'reportedcontent:this:tooltip' => 'Raportează această pagină unui administrator',
+	'reportedcontent:none' => 'Nu există conținut raportat', // @todo remove in Elgg 7.0
 	'reportedcontent:report' => 'Raportează unui admin',
 	'reportedcontent:archive' => 'Arhivează raportul',
 	'reportedcontent:archived' => 'Raportul a fost arhivat',

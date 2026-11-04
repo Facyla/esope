@@ -100,9 +100,8 @@ return array(
 	/**
 	 * Access
 	 */
-	'groups:access:invite_only' => 'Op uitnodiging - gebruikers moeten worden uitgenodigd',
-	'groups:access:private' => 'Gesloten - gebruikers moeten lidmaatschap aanvragen',
-	'groups:access:public' => 'Open - iedere gebruiker kan lid worden',
+	'groups:access:private' => 'Gesloten: gebruikers moeten lidmaatschap aanvragen',
+	'groups:access:public' => 'Open: iedere gebruiker kan lid worden',
 	'groups:access:group' => 'Alleen voor groepsleden',
 	'groups:closedgroup' => "Deze groep is besloten.",
 	'groups:closedgroup:request' => 'Om lid te worden klik je op de link "Lidmaatschap van deze groep aanvragen". Deze link vind je in het menu.',
@@ -130,7 +129,6 @@ return array(
 	'groups:joinrequestnotmade' => 'Lidmaatschapsverzoek kon niet worden gedaan',
 	'groups:joinrequestmade' => 'Lidmaatschapsverzoek succesvol gedaan',
 	'groups:joinrequest:exists' => 'Je hebt al eerder lidmaatschap aangevraagd voor deze groep',
-	'groups:join:invite_only' => 'Lidmaatschap voor deze groep is alleen op uitnodiging',
 	'groups:button:joined' => 'Lid',
 	'groups:button:owned' => 'Eigenaar',
 	'groups:joined' => 'Je bent lid geworden van de groep!',

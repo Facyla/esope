@@ -21,6 +21,7 @@ return array(
 	'thewire:thread' => "Hilo",
 	'thewire:charleft' => "caracteres restantes",
 	'thewire:tags' => "Posts etiquetados con '%s'",
+	'thewire:noposts' => "No hay posts", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Post publicado por %s',
 	

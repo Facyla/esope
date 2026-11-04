@@ -5,8 +5,7 @@ namespace Elgg\Messages;
 use Elgg\ActionResponseTestCase;
 use Elgg\Http\ErrorResponse;
 use Elgg\Http\OkResponse;
-use Symfony\Component\Mime\Email as SymfonyEmail;
-use Symfony\Component\Mime\Part\TextPart;
+use Laminas\Mail\Message;
 
 class SendActionTest extends ActionResponseTestCase {
 
@@ -17,6 +16,7 @@ class SendActionTest extends ActionResponseTestCase {
 	}
 
 	public function testSendFailsWithoutRecipient() {
+
 		$user = $this->createUser([
 			'language' => 'de',
 		]);
@@ -34,6 +34,7 @@ class SendActionTest extends ActionResponseTestCase {
 	}
 
 	public function testSendFailsToSelf() {
+
 		$user = $this->createUser([
 			'language' => 'de',
 		]);
@@ -43,7 +44,7 @@ class SendActionTest extends ActionResponseTestCase {
 		$response = $this->executeAction('messages/send', [
 			'subject' => 'Message Subject',
 			'body' => 'Message Body',
-			'recipient' => $user->guid,
+			'recipients' => $user->guid,
 		]);
 
 		$this->assertInstanceOf(ErrorResponse::class, $response);
@@ -52,6 +53,7 @@ class SendActionTest extends ActionResponseTestCase {
 	}
 
 	public function testSendFailsToInvalidUser() {
+
 		$user = $this->createUser([
 			'language' => 'de',
 		]);
@@ -61,7 +63,7 @@ class SendActionTest extends ActionResponseTestCase {
 		$response = $this->executeAction('messages/send', [
 			'subject' => 'Message Subject',
 			'body' => 'Message Body',
-			'recipient' => '-1',
+			'recipients' => 'abc',
 		]);
 
 		$this->assertInstanceOf(ErrorResponse::class, $response);
@@ -70,6 +72,7 @@ class SendActionTest extends ActionResponseTestCase {
 	}
 
 	public function testSendFailsWithoutMessageSubject() {
+
 		$user = $this->createUser([
 			'language' => 'de',
 		]);
@@ -82,7 +85,7 @@ class SendActionTest extends ActionResponseTestCase {
 
 		$response = $this->executeAction('messages/send', [
 			'body' => 'Message Body',
-			'recipient' => $recipient->guid,
+			'recipients' => $recipient->guid,
 		]);
 
 		$this->assertInstanceOf(ErrorResponse::class, $response);
@@ -91,6 +94,7 @@ class SendActionTest extends ActionResponseTestCase {
 	}
 
 	public function testSendFailsWithoutMessageBody() {
+
 		$user = $this->createUser([
 			'language' => 'de',
 		]);
@@ -103,7 +107,7 @@ class SendActionTest extends ActionResponseTestCase {
 
 		$response = $this->executeAction('messages/send', [
 			'subject' => 'Message Subject',
-			'recipient' => $recipient->guid,
+			'recipients' => $recipient->guid,
 		]);
 
 		$this->assertInstanceOf(ErrorResponse::class, $response);
@@ -112,6 +116,7 @@ class SendActionTest extends ActionResponseTestCase {
 	}
 
 	public function testSendSuccess() {
+
 		$user = $this->createUser([
 			'language' => 'de',
 		]);
@@ -127,7 +132,7 @@ class SendActionTest extends ActionResponseTestCase {
 		$response = $this->executeAction('messages/send', [
 			'subject' => 'Message Subject',
 			'body' => 'Message Body',
-			'recipient' => $recipient->guid,
+			'recipients' => $recipient->guid,
 		]);
 
 		$this->assertInstanceOf(OkResponse::class, $response);
@@ -145,6 +150,11 @@ class SendActionTest extends ActionResponseTestCase {
 			$this->assertEquals('Message Body', $message->description);
 		});
 		
+		$notification = _elgg_services()->mailer->getLastMessage();
+		/* @var $notification \Laminas\Mail\Message */
+
+		$this->assertInstanceOf(Message::class, $notification);
+
 		$expected_subject = elgg_echo('messages:email:subject', [], $recipient->getLanguage());
 		$expected_body = elgg_echo('messages:email:body', [
 			$user->getDisplayName(),
@@ -160,15 +170,17 @@ class SendActionTest extends ActionResponseTestCase {
 			$recipient->getLanguage()
 		);
 
-		/** @var SymfonyEmail $email */
-		$email = _elgg_services()->mailer_transport->getLastEmail();
-		$this->assertInstanceOf(SymfonyEmail::class, $email);
+		$plain_text_part = null;
+		foreach ($notification->getBody()->getParts() as $part) {
+			if ($part->getId() === 'plaintext') {
+				$plain_text_part = $part;
+				break;
+			}
+		}
 		
-		/** @var TextPart $plain_text_part */
-		$plain_text_part = $email->getBody();
-		$this->assertInstanceOf(TextPart::class, $plain_text_part);
+		$this->assertNotEmpty($plain_text_part);
 
-		$this->assertEquals($expected_subject, $email->getSubject());
-		$this->assertStringContainsString($expected_body, $plain_text_part->getBody());
+		$this->assertEquals($expected_subject, $notification->getSubject());
+		$this->assertStringContainsString(preg_replace('/\\n/m', ' ', $expected_body), preg_replace('/\\n/m', ' ', $plain_text_part->getRawContent()));
 	}
 }

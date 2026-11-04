@@ -21,6 +21,7 @@ return array(
 	'thewire:thread' => "Aihe",
 	'thewire:charleft' => "merkkiä jäljellä",
 	'thewire:tags' => "Tilapäivitykset, jotka merkitty tägillä '%s'",
+	'thewire:noposts' => "Ei tilapäivityksiä", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Käyttäjän %s tilapäivitys',
 	

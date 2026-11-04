@@ -64,6 +64,7 @@ return array(
 	 * Error messages
 	 */
 
+	'file:none' => "Non hai ficheiros", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "Non foi posíbel gardar o ficheiro",
 	'file:noaccess' => "Non ten permisos para cambiar o ficheiro.",
 );

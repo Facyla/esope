@@ -1,7 +1,5 @@
 <?php
 
-use Elgg\Pages\Controllers\ContentListing;
-use Elgg\Pages\Controllers\Entity;
 use Elgg\Pages\Forms\PrepareFields;
 use Elgg\Pages\GroupToolContainerLogicCheck;
 use Elgg\Pages\Notifications\CreatePageEventHandler;
@@ -17,20 +15,18 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'page',
-			'class' => \ElggPage::class,
+			'class' => '\ElggPage',
 			'capabilities' => [
 				'commentable' => true,
-				'header_image' => true,
-				'likable' => true,
-				'restorable' => true,
-				'river_emittable' => true,
 				'searchable' => true,
 				'subscribable' => true,
+				'likable' => true,
+				'restorable' => true,
 			],
 		],
 	],
 	'actions' => [
-		'page/edit' => [
+		'pages/edit' => [
 			'controller' => \Elgg\Pages\Controllers\EditAction::class,
 			'options' => [
 				'entity_type' => 'object',
@@ -39,47 +35,24 @@ return [
 		],
 	],
 	'routes' => [
-		'action:pages/edit' => [
-			'path' => 'action/pages/edit',
-			'deprecated' => '7.1', // @todo remove in Elgg 8.0
-			'controller' => \Elgg\Pages\Controllers\EditAction::class,
-			'options' => [
-				'entity_type' => 'object',
-				'entity_subtype' => 'page',
-			],
-			'middleware' => [
-				\Elgg\Router\Middleware\CsrfFirewall::class,
-				\Elgg\Router\Middleware\Gatekeeper::class,
-				\Elgg\Router\Middleware\ActionMiddleware::class,
-			],
-		],
 		'default:object:page' => [
 			'path' => '/pages',
-			'controller' => ContentListing::class,
-			'options' => [
-				'sidebar_view' => 'pages/sidebar',
-			],
+			'resource' => 'pages/all',
 		],
 		'collection:object:page:all' => [
 			'path' => '/pages/all',
-			'controller' => ContentListing::class,
-			'options' => [
-				'sidebar_view' => 'pages/sidebar',
-			],
+			'resource' => 'pages/all',
 		],
 		'collection:object:page:owner' => [
 			'path' => '/pages/owner/{username}',
-			'controller' => ContentListing::class,
-			'options' => [
-				'sidebar_view' => 'pages/sidebar',
-			],
+			'resource' => 'pages/owner',
 			'middleware' => [
 				\Elgg\Router\Middleware\UserPageOwnerGatekeeper::class,
 			],
 		],
 		'collection:object:page:friends' => [
 			'path' => '/pages/friends/{username}',
-			'controller' => ContentListing::class,
+			'resource' => 'pages/friends',
 			'required_plugins' => [
 				'friends',
 			],
@@ -88,19 +61,18 @@ return [
 			],
 		],
 		'collection:object:page:group' => [
-			'path' => '/pages/group/{guid}',
-			'controller' => ContentListing::class,
-			'options' => [
-				'group_tool' => 'pages',
-				'sidebar_view' => 'pages/sidebar',
-			],
+			'path' => '/pages/group/{guid}/{subpage?}',
+			'resource' => 'pages/group',
 			'required_plugins' => [
 				'groups',
+			],
+			'middleware' => [
+				\Elgg\Router\Middleware\GroupPageOwnerGatekeeper::class,
 			],
 		],
 		'add:object:page' => [
 			'path' => '/pages/add/{guid}',
-			'controller' => Entity::class,
+			'resource' => 'pages/add',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\PageOwnerGatekeeper::class,
@@ -108,14 +80,11 @@ return [
 		],
 		'view:object:page' => [
 			'path' => '/pages/view/{guid}/{title?}',
-			'controller' => Entity::class,
-			'options' => [
-				'sidebar_view' => 'pages/sidebar/navigation',
-			],
+			'resource' => 'pages/view',
 		],
 		'edit:object:page' => [
 			'path' => '/pages/edit/{guid}',
-			'controller' => Entity::class,
+			'resource' => 'pages/edit',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 			],
@@ -167,13 +136,8 @@ return [
 			],
 		],
 		'form:prepare:fields' => [
-			'page/edit' => [
+			'pages/edit' => [
 				PrepareFields::class => [],
-			],
-		],
-		'form:register:fields' => [
-			'object:page' => [
-				'Elgg\Forms\RegisterFields::addContainerInput' => ['priority' => 600],
 			],
 		],
 		'permissions_check' => [
@@ -194,9 +158,6 @@ return [
 			],
 			'menu:site' => [
 				'Elgg\Pages\Menus\Site::register' => [],
-			],
-			'menu:title:object:page' => [
-				'Elgg\Pages\Menus\Title::registerAddSubpage' => [],
 			],
 		],
 		'seeds' => [
@@ -221,12 +182,8 @@ return [
 	'notifications' => [
 		'object' => [
 			'page' => [
-				'create' =>	[
-					CreatePageEventHandler::class => [],
-				],
-				'mentions' => [
-					\Elgg\Notifications\Handlers\Mentions::class => [],
-				],
+				'create' => CreatePageEventHandler::class,
+				'mentions' => \Elgg\Notifications\MentionsEventHandler::class,
 			],
 		],
 	],

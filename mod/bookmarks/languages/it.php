@@ -24,6 +24,7 @@ return array(
 	'bookmarks:bookmarklet' => "Ottieni il Bookmarklet",
 	'bookmarks:bookmarklet:group' => "Ottieni il Bookmarklet di gruppo",
 	'bookmarks:address' => "Indirizzo del segnalibro",
+	'bookmarks:none' => 'Nessun segnalibro', // @todo remove in Elgg 7.0
 
 	'bookmarks:notify:summary' => 'Nuovo segnalibro chiamato %s',
 	'bookmarks:notify:subject' => 'Nuovo segnalibro: %s',

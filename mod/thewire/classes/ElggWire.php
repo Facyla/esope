@@ -18,6 +18,8 @@ class ElggWire extends ElggObject {
 
 		$this->attributes['subtype'] = 'thewire';
 		$this->attributes['access_id'] = ACCESS_PUBLIC;
+		
+		$this->attributes['method'] = 'site'; // @todo remove this in Elgg 7.0
 	}
 	
 	/**

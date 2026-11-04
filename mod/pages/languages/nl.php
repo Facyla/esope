@@ -49,6 +49,7 @@ Om de pagina te bekijken en te reageren, klik hier:
 	'notification:mentions:object:page:subject' => '%s heeft je vermeld in een pagina',
 
 	'pages:more' => 'Meer pagina\'s',
+	'pages:none' => 'Nog geen pagina\'s aangemaakt', // @todo remove in Elgg 7.0
 
 	/**
 	* River
@@ -66,7 +67,6 @@ Om de pagina te bekijken en te reageren, klik hier:
 	'pages:description' => 'Jouw tekst',
 	'pages:tags' => 'Tags',
 	'pages:parent_guid' => 'Hoofdpagina',
-	'pages:parent_guid:root' => 'Bovenste pagina',
 
 	/**
 	 * Status and error messages

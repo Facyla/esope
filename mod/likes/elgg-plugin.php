@@ -4,10 +4,8 @@ require_once(__DIR__ . '/lib/functions.php');
 
 return [
 	'plugin' => [
+		'name' => 'Likes',
 		'activate_on_install' => true,
-	],
-	'settings' => [
-		'details' => 0,
 	],
 	'actions' => [
 		'likes/add' => [],
@@ -22,7 +20,7 @@ return [
 		],
 	],
 	'events' => [
-		'ajax_results' => [
+		'ajax_response' => [
 			'all' => [
 				\Elgg\Likes\AjaxResponseHandler::class => [],
 			],
@@ -75,9 +73,7 @@ return [
 	'notifications' => [
 		'annotation' => [
 			'likes' => [
-				'create' => [
-					\Elgg\Likes\Notifications\CreateLikesEventHandler::class => [],
-				],
+				'create' => \Elgg\Likes\Notifications\CreateLikesEventHandler::class,
 			],
 		],
 	],

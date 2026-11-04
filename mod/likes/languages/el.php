@@ -8,8 +8,6 @@
 return array(
 	'annotation:delete:likes:fail' => "Σφάλμα κατά την διαδικασία διαγραφής από τα αγαπημένα σας",
 	'annotation:delete:likes:success' => "Δεν μου αρέσει πλέον",
-	
-	// settings
 	'likes:deleted' => 'Δεν μου αρέσει πλέον',
 	'likes:see' => 'Δείτε σε ποιους αρέσει',
 	'likes:remove' => 'Δεν μου αρέσει',

@@ -1,13 +1,8 @@
 <?php
 
-use Elgg\Exceptions\Http\BadRequestException;
-
 elgg_push_collection_breadcrumbs('group', 'group');
 
 $tag = (string) get_input('tag');
-if (elgg_is_empty($tag)) {
-	throw new BadRequestException(elgg_echo('error:missing_data'));
-}
 
 $content = elgg_list_entities([
 	'query' => $tag,

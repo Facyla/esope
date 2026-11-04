@@ -15,7 +15,10 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'site_notification',
-			'class' => \SiteNotification::class,
+			'class' => 'SiteNotification',
+			'capabilities' => [
+				'commentable' => false,
+			],
 		],
 	],
 	'actions' => [

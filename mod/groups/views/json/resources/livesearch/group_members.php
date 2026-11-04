@@ -31,7 +31,6 @@ $options = [
 	'relationship_guid' => $group_guid,
 	'inverse_relationship' => true,
 	'limit' => $limit,
-	'save_as_array' => (bool) elgg_extract('save_as_array', $vars, true),
 	'sort_by' => [
 		'property_type' => 'metadata',
 		'property' => 'name',

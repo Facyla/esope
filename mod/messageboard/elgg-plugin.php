@@ -2,6 +2,8 @@
 
 use Elgg\MessageBoard\Notifications\CreateMessageboardNotificationHandler;
 
+require_once(__DIR__ . '/lib/functions.php');
+
 return [
 	'plugin' => [
 		'name' => 'Message Board',
@@ -36,9 +38,7 @@ return [
 	'notifications' => [
 		'annotation' => [
 			'messageboard' => [
-				'create:after' => [
-					CreateMessageboardNotificationHandler::class => [],
-				],
+				'create:after' => CreateMessageboardNotificationHandler::class,
 			],
 		],
 	],

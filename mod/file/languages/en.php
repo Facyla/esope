@@ -22,6 +22,9 @@ return array(
 	'collection:object:file' => 'Files',
 	'list:object:file:no_results' => 'No files found',
 	
+	'file:upgrade:2022092801:title' => 'Move Files',
+	'file:upgrade:2022092801:description' => 'Moves files uploaded using the file plugin to the file entity folder instead of the owner entity folder.',
+	
 	'collection:object:file:all' => "All site files",
 	'collection:object:file:owner' => "%s's files",
 	'collection:object:file:friends' => "Friends' files",
@@ -97,6 +100,7 @@ View and comment on the file:
 	 * Error messages
 	 */
 
+	'file:none' => "No files.", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "Sorry; we could not save your file.",
 	'file:noaccess' => "You do not have permissions to change this file",
 	'file:cannotload' => "There was an error uploading the file",

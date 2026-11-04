@@ -1,9 +1,13 @@
 <?php
-
-elgg_deprecated_notice("The resource view 'bookmarks/view' has been deprecated", '7.1');
+/**
+ * View a bookmark
+ */
 
 $guid = (int) elgg_extract('guid', $vars);
-$entity = elgg_entity_gatekeeper($guid, 'object', 'bookmarks');
+
+elgg_entity_gatekeeper($guid, 'object', 'bookmarks');
+
+$entity = get_entity($guid);
 
 elgg_push_entity_breadcrumbs($entity);
 

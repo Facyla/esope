@@ -83,6 +83,7 @@ return array(
 	/**
 	 * Access
 	 */
+	'groups:access:private' => 'Suljettu - Jäsenet pitää kutsua',
 	'groups:access:public' => 'Avoin - Kuka tahansa voi liittyä',
 	'groups:access:group' => 'Vain ryhmän jäsenet',
 	'groups:closedgroup' => "Tällä ryhmällä on suljettu jäsenyys.",

@@ -6,16 +6,17 @@
  */
 
 return array(
+
 	'item:object:file' => 'Filer',
-	'collection:object:file' => 'Filer',
 	
+	'collection:object:file' => 'Filer',
 	'collection:object:file:all' => "Alle filer",
 	'collection:object:file:owner' => "%s's filer",
 	'collection:object:file:friends' => "Venners filer",
 	'collection:object:file:group' => "Gruppe filer",
 	'add:object:file' => "Upload en fil",
 	'edit:object:file' => "Rediger fil",
-	
+
 	'file:more' => "Flere filer",
 	'file:list' => "Liste",
 
@@ -61,6 +62,7 @@ return array(
 	 * Error messages
 	 */
 
+	'file:none' => "Vi kan ikke finde nogle filer i øjeblikket",
 	'file:uploadfailed' => "Beklager, vi kunne ikke gemme din fil.",
 	'file:noaccess' => "Du har ikke tilladelse ti at ændre denne fil",
 );

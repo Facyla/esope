@@ -11,7 +11,6 @@ return array(
 	'site_notifications:topbar' => 'Уведомления',
 	'item:object:site_notification' => 'Уведомление сайта',
 	'collection:object:site_notification' => 'Уведомления сайта',
-	'list:object:site_notification:no_results' => 'Уведомлений не найдено',
 
 	'site_notifications:unread' => 'Непрочитано',
 	'site_notifications:read' => 'Прочитано',
@@ -25,6 +24,7 @@ return array(
 	'site_notifications:settings:read_cleanup_interval' => 'Интервал очистки прочитанных уведомлений',
 	'site_notifications:settings:read_cleanup_interval:help' => 'Как часто следует очищать прочитанные уведомления. На сайтах с высокой активностью вы можете увеличить интервал, чтобы не пропустить новые уведомления. ',
 	
+	'site_notifications:empty' => 'Нет уведомлений', // @todo remove in Elgg 7.0
 	'site_notifications:toggle_all' => 'Отметить все',
 	'site_notifications:mark_read' => 'Отметить прочитанным',
 	'site_notifications:mark_read:confirm' => 'Уверены, что хотите отметить все выбранные уведомления как прочитанные?',

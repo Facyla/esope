@@ -22,6 +22,9 @@ return array(
 	'collection:object:file' => 'Bestanden',
 	'list:object:file:no_results' => 'Geen bestanden gevonden',
 	
+	'file:upgrade:2022092801:title' => 'Verplaats bestanden',
+	'file:upgrade:2022092801:description' => 'Verplaatst bestand die middels de file plugin zijn geüpload bij de eigenaar van de content naar de bestandslocatie van de entiteit zelf.',
+	
 	'collection:object:file:all' => "Alle bestanden",
 	'collection:object:file:owner' => "%s's bestanden",
 	'collection:object:file:friends' => "Bestanden van vrienden",
@@ -97,6 +100,7 @@ Om het bestand te bekijken en te reageren, klik hier:
 	 * Error messages
 	 */
 
+	'file:none' => "We konden op dit moment geen bestanden vinden.", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "Sorry, we konden het bestand niet opslaan.",
 	'file:noaccess' => "Je hebt onvoldoende rechten om dit bestand aan te passen",
 	'file:cannotload' => "Er was een fout tijdens het uploaden van het bestand",

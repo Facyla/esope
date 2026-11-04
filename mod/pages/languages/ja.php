@@ -40,6 +40,7 @@ return array(
 
 このページの表示とコメントは:
 %s',
+	'pages:none' => '', // @todo remove in Elgg 7.0
 
 	/**
 	* River

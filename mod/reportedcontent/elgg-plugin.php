@@ -1,7 +1,5 @@
 <?php
 
-use Elgg\ReportedContent\Controllers\Entity;
-
 return [
 	'plugin' => [
 		'name' => 'Reported Content',
@@ -11,7 +9,7 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'reported_content',
-			'class' => \ElggReportedContent::class,
+			'class' => 'ElggReportedContent',
 			'capabilities' => [
 				'commentable' => true,
 			],
@@ -34,10 +32,7 @@ return [
 	'routes' => [
 		'view:object:reported_content' => [
 			'path' => '/admin/reportedcontent/view/{guid}',
-			'controller' => Entity::class,
-			'options' => [
-				'sidebar_view' => 'reportedcontent/sidebar',
-			],
+			'resource' => 'reportedcontent/view',
 			'middleware' => [
 				\Elgg\Router\Middleware\AdminGatekeeper::class,
 			],
@@ -76,9 +71,7 @@ return [
 	'notifications' => [
 		'object' => [
 			'reported_content' => [
-				'create' => [
-					\Elgg\ReportedContent\Notifications\CreateReportedContentNotificationHandler::class => [],
-				],
+				'create' => \Elgg\ReportedContent\Notifications\CreateReportedContentNotificationHandler::class,
 			],
 		],
 	],

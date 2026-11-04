@@ -31,7 +31,7 @@ class ElggBookmark extends ElggObject {
 		
 		$result[] = [
 			'#type' => 'url',
-			'#label' => elgg_echo('website'),
+			'#label' => elgg_echo('bookmarks:address'),
 			'name' => 'address',
 			'required' => true,
 		];

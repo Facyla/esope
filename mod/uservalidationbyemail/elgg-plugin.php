@@ -70,9 +70,7 @@ return [
 	'notifications' => [
 		'user' => [
 			'user' => [
-				'uservalidationbyemail' => [
-					ValidateEmailHandler::class => [],
-				],
+				'uservalidationbyemail' => ValidateEmailHandler::class,
 			],
 		],
 	],

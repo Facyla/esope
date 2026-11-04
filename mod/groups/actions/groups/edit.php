@@ -114,15 +114,25 @@ foreach ($tools as $tool) {
 	}
 }
 
-// Group membership
-$group->membership = (int) get_input('membership');
+// Group membership - should these be treated with same constants as access permissions?
+$value = get_input('membership');
+if ($group->membership === null || $value !== null) {
+	$is_public_membership = ($value == ACCESS_PUBLIC);
+	$group->membership = $is_public_membership ? ACCESS_PUBLIC : ACCESS_PRIVATE;
+}
 
 $group->setContentAccessMode((string) get_input('content_access_mode'));
 
-$old_owner_guid = $is_new_group ? 0 : $group->owner_guid;
-$new_owner_guid = (int) get_input('owner_guid', $old_owner_guid);
+if ($is_new_group) {
+	$group->access_id = ACCESS_PUBLIC;
+}
 
-if (!$is_new_group && $new_owner_guid && $new_owner_guid !== $old_owner_guid) {
+$old_owner_guid = $is_new_group ? 0 : $group->owner_guid;
+
+$value = (array) get_input('owner_guid');
+$new_owner_guid = empty($value) ? $old_owner_guid : (int) $value[0];
+
+if (!$is_new_group && $new_owner_guid && $new_owner_guid != $old_owner_guid) {
 	// verify new owner is member and old owner/admin is logged in
 	if ($group->isMember(get_user($new_owner_guid)) && ($old_owner_guid == $user->guid || $user->isAdmin())) {
 		$group->owner_guid = $new_owner_guid;

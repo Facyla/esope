@@ -17,6 +17,8 @@ return array(
 	'discussion:settings:enable_global_discussions' => 'Aktivera globala diskussioner',
 	'discussion:settings:enable_global_discussions:help' => 'Tillåt diskussioner att skapas utanför grupper',
 
+	'discussion:latest' => 'Senaste diskussioner',
+	'discussion:none' => 'Inga diskussioner', // @todo remove in Elgg 7.0
 	'discussion:updated' => "Senaste kommentar av %s %s",
 
 	'discussion:topic:created' => 'Diskussionsämnet skapades.',

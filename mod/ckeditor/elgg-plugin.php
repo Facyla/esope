@@ -7,19 +7,12 @@ return [
 	],
 	'views' => [
 		'default' => [
-			'ckeditor/ckeditor5.mjs' => \Elgg\Project\Paths::project() . 'vendor/npm-asset/ckeditor5/dist/browser/ckeditor5.js',
-			'ckeditor/content.css' => \Elgg\Project\Paths::project() . 'vendor/npm-asset/ckeditor5/dist/browser/ckeditor5-content.css',
-			'ckeditor/editor.css' => \Elgg\Project\Paths::project() . 'vendor/npm-asset/ckeditor5/dist/browser/ckeditor5-editor.css',
-			'ckeditor/translations/' => \Elgg\Project\Paths::project() . 'vendor/npm-asset/ckeditor5/dist/translations/',
+			'ckeditor/' => __DIR__ . '/vendors/ckeditor5/build/',
 		],
 	],
 	'view_extensions' => [
-		'ckeditor/content.css' => [
-			'ckeditor/elgg_content.css' => [],
-		],
 		'ckeditor/editor.css' => [
 			'ckeditor/elgg_editor.css' => [],
-			'ckeditor/elgg_content.css' => [],
 		],
 		'elgg.css' => [
 			'ckeditor/content.css' => [],

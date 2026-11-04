@@ -15,7 +15,7 @@ if (!$entity instanceof \ElggEntity) {
 $entity_metadata = elgg_get_metadata(['guid' => $entity->guid, 'limit' => false]);
 
 if (empty($entity_metadata)) {
-	$metadata_info = elgg_view_no_results();
+	$metadata_info = elgg_echo('notfound');
 } else {
 	$md_columns = ['id', 'name', 'value', 'value_type', 'time_created'];
 	
@@ -62,7 +62,7 @@ if (empty($entity_metadata)) {
 			'icon' => 'remove',
 			'text' => false,
 			'title' => elgg_echo('delete'),
-			'href' => elgg_generate_action_url('developers/entity_explorer_delete', [
+			'href' => elgg_http_add_url_query_elements('action/developers/entity_explorer_delete', [
 				'guid' => $entity->guid,
 				'type' => 'metadata',
 				'key' => $md->id,

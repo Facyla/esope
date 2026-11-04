@@ -23,6 +23,7 @@ return array(
 	'profile:phone' => "Telefoon",
 	'profile:mobile' => "Mobiele telefoon",
 	'profile:website' => "Website",
+	'profile:twitter' => "Twitter gebruikersnaam",
 	'profile:saved' => "Je profiel is succesvol opgeslagen",
 
 	'profile:field:text' => 'Korte tekst',

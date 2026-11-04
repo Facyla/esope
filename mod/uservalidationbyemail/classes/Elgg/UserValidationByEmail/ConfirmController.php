@@ -2,7 +2,7 @@
 
 namespace Elgg\UserValidationByEmail;
 
-use Elgg\Exceptions\Http\LoginException;
+use Elgg\Exceptions\LoginException;
 use Elgg\Http\ResponseBuilder;
 
 /**

@@ -1,26 +1,29 @@
 <?php
-
-elgg_deprecated_notice("The resource view 'file/view' has been deprecated", '7.1');
+/**
+ * View a file
+ */
 
 $guid = (int) elgg_extract('guid', $vars);
 
-/** @var \ElggFile $entity */
-$entity = elgg_entity_gatekeeper($guid, 'object', 'file');
+elgg_entity_gatekeeper($guid, 'object', 'file');
 
-elgg_push_entity_breadcrumbs($entity);
+/* @var $file \ElggFile */
+$file = get_entity($guid);
 
-if ($entity->canDownload()) {
+elgg_push_entity_breadcrumbs($file);
+
+if ($file->canDownload()) {
 	elgg_register_menu_item('title', [
 		'name' => 'download',
 		'text' => elgg_echo('download'),
-		'href' => $entity->getDownloadURL(),
+		'href' => $file->getDownloadURL(),
 		'icon' => 'download',
 		'link_class' => 'elgg-button elgg-button-action',
 	]);
 }
 
-echo elgg_view_page($entity->getDisplayName(), [
-	'content' => elgg_view_entity($entity),
-	'entity' => $entity,
+echo elgg_view_page($file->getDisplayName(), [
+	'content' => elgg_view_entity($file),
+	'entity' => $file,
 	'filter_id' => 'file/view',
 ]);

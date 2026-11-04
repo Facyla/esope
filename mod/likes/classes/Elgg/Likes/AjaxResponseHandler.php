@@ -10,20 +10,20 @@ class AjaxResponseHandler {
 	/**
 	 * Alter ajax response to send back likes count
 	 *
-	 * @param \Elgg\Event $event 'ajax_results', 'all'
+	 * @param \Elgg\Event $event \Elgg\Services\AjaxResponse::RESPONSE_EVENT, 'all'
 	 *
-	 * @return \stdClass|null
+	 * @return void|\Elgg\Services\AjaxResponse
 	 */
-	public function __invoke(\Elgg\Event $event): ?\stdClass {
+	public function __invoke(\Elgg\Event $event) {
 		$entity = get_entity((int) get_input('guid'));
-		if (!$entity instanceof \ElggEntity || !$entity->hasCapability('likeable') || elgg_get_viewtype() !== 'default') {
-			return null;
+		if (!$entity || elgg_get_viewtype() !== 'default') {
+			return;
 		}
 		
-		/* @var $results \stdClass */
-		$results = $event->getValue();
-
-		$results->likes_status = [
+		/* @var $response \Elgg\Services\AjaxResponse */
+		$response = $event->getValue();
+		
+		$response->getData()->likes_status = [
 			'guid' => $entity->guid,
 			'count' => likes_count($entity),
 			'count_menu_item' => elgg_view('navigation/menu/elements/item/url', ['item' => _likes_count_menu_item($entity)]),
@@ -31,6 +31,6 @@ class AjaxResponseHandler {
 			'is_liked' => DataService::instance()->currentUserLikesEntity($entity->guid),
 		];
 		
-		return $results;
+		return $response;
 	}
 }

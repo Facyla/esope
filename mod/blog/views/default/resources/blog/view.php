@@ -1,9 +1,9 @@
 <?php
 
-elgg_deprecated_notice("The resource view 'blog/view' has been deprecated", '7.1');
-
 $guid = (int) elgg_extract('guid', $vars);
-$entity = elgg_entity_gatekeeper($guid, 'object', 'blog');
+elgg_entity_gatekeeper($guid, 'object', 'blog');
+
+$entity = get_entity($guid);
 
 elgg_push_entity_breadcrumbs($entity);
 

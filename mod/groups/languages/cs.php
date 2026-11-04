@@ -83,6 +83,7 @@ return array(
 	/**
 	 * Access
 	 */
+	'groups:access:private' => 'Uzavřená - uživatelé musí být pozváni',
 	'groups:access:public' => 'Veřejná - jakýkoliv uživatel se může přidat',
 	'groups:access:group' => 'Pouze členové skupiny',
 	'groups:closedgroup' => "Tato skupina je přístupna pouze jejím členům.",

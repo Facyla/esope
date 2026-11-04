@@ -5,14 +5,15 @@
 
 $subject = elgg_strip_tags((string) get_input('subject'));
 $body = get_input('body');
-$recipient = (int) get_input('recipient');
+$recipients = (array) get_input('recipients');
 $original_msg_guid = (int) get_input('original_guid');
 
-if (empty($recipient)) {
+if (empty($recipients)) {
 	return elgg_error_response(elgg_echo('messages:user:blank'));
 }
 
-if ($recipient === elgg_get_logged_in_user_guid()) {
+$recipient = (int) elgg_extract(0, $recipients);
+if ($recipient == elgg_get_logged_in_user_guid()) {
 	return elgg_error_response(elgg_echo('messages:user:self'));
 }
 

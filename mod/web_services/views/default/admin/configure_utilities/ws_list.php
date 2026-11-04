@@ -7,7 +7,7 @@ use Elgg\WebServices\Di\ApiRegistrationService;
 
 $services = ApiRegistrationService::instance()->getAllApiMethods();
 if (empty($services)) {
-	echo elgg_view_no_results();
+	echo elgg_echo('notfound');
 	return;
 }
 

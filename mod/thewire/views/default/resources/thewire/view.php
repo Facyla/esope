@@ -1,14 +1,18 @@
 <?php
-
-elgg_deprecated_notice("The resource view 'thewire/view' has been deprecated", '7.1');
+/**
+ * View individual wire post
+ */
 
 $guid = (int) elgg_extract('guid', $vars);
-$entity = elgg_entity_gatekeeper($guid, 'object', 'thewire');
+elgg_entity_gatekeeper($guid, 'object', 'thewire');
 
-elgg_push_entity_breadcrumbs($entity);
+/* @var $post \ElggWire */
+$post = get_entity($guid);
 
-echo elgg_view_page(elgg_echo('thewire:by', [$entity->getOwnerEntity()->getDisplayName()]), [
-	'content' => elgg_view_entity($entity),
-	'entity' => $entity,
+elgg_push_entity_breadcrumbs($post);
+
+echo elgg_view_page(elgg_echo('thewire:by', [$post->getOwnerEntity()->getDisplayName()]), [
+	'content' => elgg_view_entity($post),
+	'entity' => $post,
 	'filter_id' => 'thewire/view',
 ]);

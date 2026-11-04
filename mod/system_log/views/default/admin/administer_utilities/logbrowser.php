@@ -31,7 +31,7 @@ if ($timeupper) {
 	$timeupper = strtotime($timeupper);
 }
 
-$ip_address = elgg_get_plugin_setting('enable_ip_logging', 'system_log') ? get_input('ip_address') : null;
+$ip_address = get_input('ip_address');
 $object_id = get_input('object_id');
 $event = get_input('event');
 

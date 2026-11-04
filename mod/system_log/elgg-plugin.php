@@ -1,22 +1,17 @@
 <?php
 
-use Elgg\SystemLog\Bootstrap;
-use Elgg\SystemLog\Controllers\ClearIpAddresses;
-
 return [
-	'bootstrap' => Bootstrap::class,
+	'bootstrap' => Elgg\SystemLog\Bootstrap::class,
 	'plugin' => [
 		'name' => 'System Log',
 		'activate_on_install' => true,
 	],
 	'settings' => [
 		'period' => 'never',
-		'enable_ip_logging' => true,
 	],
-	'actions' => [
-		'system_log/clear_ip_addresses' => [
-			'access' => 'admin',
-			'controller' => ClearIpAddresses::class,
+	'view_extensions' => [
+		'core/settings/statistics' => [
+			'core/settings/account/login_history' => [],
 		],
 	],
 	'events' => [
@@ -58,11 +53,6 @@ return [
 			'system' => [
 				'Elgg\SystemLog\Logger::disableLogging' => [],
 			],
-		],
-	],
-	'view_extensions' => [
-		'core/settings/statistics' => [
-			'core/settings/account/login_history' => [],
 		],
 	],
 ];

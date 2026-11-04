@@ -80,6 +80,7 @@ return array(
 	/**
 	 * Access
 	 */
+	'groups:access:private' => 'Κλειστό - Οι χρήστες πρέπει να προσκληθούν',
 	'groups:access:public' => 'Ανοικτό - Όλοι οι χρήστες μπορούν να συνδεθούν',
 	'groups:access:group' => 'Μόνο μέλη της ομάδας',
 	'groups:closedgroup' => "Αυτή η ομάδα είναι κλειστή.",

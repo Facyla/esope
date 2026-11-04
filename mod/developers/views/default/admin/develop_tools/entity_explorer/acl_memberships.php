@@ -13,7 +13,7 @@ if (!$entity instanceof \ElggEntity) {
 $acls = _elgg_services()->accessCollections->getCollectionsByMember($entity->guid);
 
 if (empty($acls)) {
-	$result = elgg_view_no_results();
+	$result = elgg_echo('notfound');
 } else {
 	$acl_columns = ['id', 'owner_guid', 'name', 'subtype'];
 
@@ -35,8 +35,7 @@ if (empty($acls)) {
 			if ($col_name === 'owner_guid') {
 				$value = elgg_view('output/url', [
 					'text' => $value,
-					'href' => elgg_generate_url('admin', [
-						'segments' => 'develop_tools/entity_explorer',
+					'href' => elgg_http_add_url_query_elements('admin/develop_tools/entity_explorer', [
 						'guid' => $value,
 					]),
 				]);

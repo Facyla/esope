@@ -23,7 +23,7 @@ class LogEventCache extends CompositeCache {
 	 * Returns registered service name
 	 * @return string
 	 */
-	public static function name(): string {
+	public static function name() {
 		return 'system_log.cache';
 	}
 }

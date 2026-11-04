@@ -19,7 +19,7 @@ if (strncmp($reply_title, 'RE:', 3) != 0) {
 $fields = [
 	[
 		'#type' => 'hidden',
-		'name' => 'recipient',
+		'name' => 'recipients[]',
 		'value' => $message->fromId,
 	],
 	[

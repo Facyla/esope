@@ -23,6 +23,7 @@ return array(
 	'profile:phone' => "Телефон",
 	'profile:mobile' => "Мобильный телефон",
 	'profile:website' => "Сайт",
+	'profile:twitter' => "Логин в Twitter",
 	'profile:saved' => "Ваш профиль успешно сохранён.",
 
 	'profile:field:text' => 'Краткий текст',

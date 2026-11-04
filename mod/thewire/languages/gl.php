@@ -21,6 +21,7 @@ return array(
 	'thewire:thread' => "Fío",
 	'thewire:charleft' => "caracteres restantes",
 	'thewire:tags' => "Chíos coa etiqueta «%s»",
+	'thewire:noposts' => "Aínda non hai chíos.", // @todo remove in Elgg 7.0
 
 	'thewire:by' => 'Chíos de %s',
 	

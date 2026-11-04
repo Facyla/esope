@@ -1,13 +1,16 @@
 <?php
+/**
+ * Add bookmark page
+ */
 
-elgg_deprecated_notice("The resource view 'bookmarks/edit' has been deprecated", '7.1');
+$bookmark_guid = (int) elgg_extract('guid', $vars);
+elgg_entity_gatekeeper($bookmark_guid, 'object', 'bookmarks', true);
 
-$guid = (int) elgg_extract('guid', $vars);
-$entity = elgg_entity_gatekeeper($guid, 'object', 'bookmarks', true);
+$bookmark = get_entity($bookmark_guid);
 
-elgg_push_entity_breadcrumbs($entity);
+elgg_push_entity_breadcrumbs($bookmark);
 
 echo elgg_view_page(elgg_echo('edit:object:bookmarks'), [
 	'filter_id' => 'bookmarks/edit',
-	'content' => elgg_view_form('bookmarks/edit', ['sticky_enabled' => true], ['entity' => $entity]),
+	'content' => elgg_view_form('bookmarks/save', ['sticky_enabled' => true], ['entity' => $bookmark]),
 ]);

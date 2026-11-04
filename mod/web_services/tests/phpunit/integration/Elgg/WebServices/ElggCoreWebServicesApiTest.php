@@ -2,8 +2,6 @@
 
 namespace Elgg\WebServices;
 
-use Elgg\Exceptions\Http\BadRequestException;
-use Elgg\Exceptions\Http\UnauthorizedException;
 use Elgg\Plugins\IntegrationTestCase;
 use Elgg\WebServices\PAM\API\APIKey;
 
@@ -30,14 +28,7 @@ class ElggCoreWebServicesApiTest extends IntegrationTestCase {
 	public function testApiAuthKeyNoKey() {
 		$apikey = new APIKey();
 		
-		$this->assertNull($apikey());
-	}
-
-	public function testApiAuthKeyEmptyKey() {
-		$apikey = new APIKey();
-		set_input('api_key', '');
-		
-		$this->expectException(BadRequestException::class);
+		$this->expectException(\APIException::class);
 		$this->expectExceptionMessage(elgg_echo('APIException:MissingAPIKey'));
 		$apikey();
 	}
@@ -46,7 +37,7 @@ class ElggCoreWebServicesApiTest extends IntegrationTestCase {
 		$apikey = new APIKey();
 		set_input('api_key', 'BAD');
 		
-		$this->expectException(UnauthorizedException::class);
+		$this->expectException(\APIException::class);
 		$this->expectExceptionMessage(elgg_echo('APIException:BadAPIKey'));
 		$apikey();
 	}
@@ -67,7 +58,7 @@ class ElggCoreWebServicesApiTest extends IntegrationTestCase {
 		$this->assertTrue($entity->disableKeys());
 		$this->assertFalse($entity->hasActiveKeys());
 		
-		$this->expectException(UnauthorizedException::class);
+		$this->expectException(\APIException::class);
 		$this->expectExceptionMessage(elgg_echo('APIException:BadAPIKey'));
 		$apikey();
 	}

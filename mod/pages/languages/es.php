@@ -30,6 +30,7 @@ return array(
 	'pages:notify:subject' => "Una nueva página: %s",
 
 	'pages:more' => 'M&aacute;s p&aacute;ginas',
+	'pages:none' => 'No se han creado p&aacute;ginas a&uacute;n', // @todo remove in Elgg 7.0
 
 	/**
 	* River

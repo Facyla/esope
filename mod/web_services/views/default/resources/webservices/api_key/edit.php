@@ -4,7 +4,8 @@
  */
 
 $guid = (int) elgg_extract('guid', $vars);
-$entity = elgg_entity_gatekeeper($guid, 'object', ElggApiKey::SUBTYPE, true);
+elgg_entity_gatekeeper($guid, 'object', ElggApiKey::SUBTYPE, true);
+$entity = get_entity($guid);
 
 $title = elgg_echo('edit:object:api_key', [$entity->getDisplayName()]);
 

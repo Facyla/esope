@@ -30,6 +30,7 @@ return array(
 	'pages:notify:subject' => "Nova stranica: %s",
 
 	'pages:more' => 'Više stranica',
+	'pages:none' => 'Još nije izrađene niti jedna stranica', // @todo remove in Elgg 7.0
 
 	/**
 	* River

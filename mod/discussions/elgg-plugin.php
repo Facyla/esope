@@ -1,6 +1,5 @@
 <?php
 
-use Elgg\Discussions\Controllers\ContentListing;
 use Elgg\Discussions\Forms\PrepareFields;
 use Elgg\Discussions\GroupToolContainerLogicCheck;
 use Elgg\Discussions\Notifications\CreateDiscussionEventHandler;
@@ -14,10 +13,9 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'discussion',
-			'class' => \ElggDiscussion::class,
+			'class' => 'ElggDiscussion',
 			'capabilities' => [
 				'commentable' => true,
-				'river_emittable' => true,
 				'searchable' => true,
 				'subscribable' => true,
 				'likable' => true,
@@ -29,7 +27,7 @@ return [
 		'enable_global_discussions' => 0,
 	],
 	'actions' => [
-		'discussion/edit' => [
+		'discussion/save' => [
 			'controller' => \Elgg\Discussions\Controllers\EditAction::class,
 			'options' => [
 				'entity_type' => 'object',
@@ -41,22 +39,22 @@ return [
 	'routes' => [
 		'default:object:discussion' => [
 			'path' => '/discussion',
-			'controller' => ContentListing::class,
+			'resource' => 'discussion/all',
 		],
 		'collection:object:discussion:all' => [
 			'path' => '/discussion/all',
-			'controller' => ContentListing::class,
+			'resource' => 'discussion/all',
 		],
 		'collection:object:discussion:owner' => [
 			'path' => '/discussion/owner/{username}',
-			'controller' => ContentListing::class,
+			'resource' => 'discussion/owner',
 			'middleware' => [
 				\Elgg\Router\Middleware\UserPageOwnerGatekeeper::class,
 			],
 		],
 		'collection:object:discussion:my_groups' => [
 			'path' => '/discussion/my_groups/{username}',
-			'controller' => ContentListing::class,
+			'resource' => 'discussion/my_groups',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
@@ -64,17 +62,17 @@ return [
 		],
 		'collection:object:discussion:group' => [
 			'path' => '/discussion/group/{guid}',
-			'controller' => ContentListing::class,
-			'options' => [
-				'group_tool' => 'forum',
-			],
+			'resource' => 'discussion/group',
 			'required_plugins' => [
 				'groups',
+			],
+			'middleware' => [
+				\Elgg\Router\Middleware\GroupPageOwnerGatekeeper::class,
 			],
 		],
 		'add:object:discussion' => [
 			'path' => '/discussion/add/{guid}',
-			'controller' => \Elgg\Controllers\GenericEntity::class,
+			'resource' => 'discussion/add',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\PageOwnerGatekeeper::class,
@@ -82,27 +80,21 @@ return [
 		],
 		'edit:object:discussion' => [
 			'path' => '/discussion/edit/{guid}',
-			'controller' => \Elgg\Controllers\GenericEntity::class,
+			'resource' => 'discussion/edit',
 			'middleware' => [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 			],
 		],
 		'view:object:discussion' => [
 			'path' => '/discussion/view/{guid}/{title?}',
-			'controller' => \Elgg\Controllers\GenericEntity::class,
+			'resource' => 'discussion/view',
 		],
 	],
 	'events' => [
 		'container_logic_check' => [
 			'object' => [
 				'Elgg\Discussions\Permissions::containerLogic' => [],
-				'Elgg\Discussions\Permissions::preventCommentOnClosedDiscussion' => [],
 				GroupToolContainerLogicCheck::class => [],
-			],
-		],
-		'cron' => [
-			'daily' => [
-				'Elgg\Discussions\Cron::autoClose' => [],
 			],
 		],
 		'entity:url' => [
@@ -111,13 +103,18 @@ return [
 			],
 		],
 		'form:prepare:fields' => [
-			'discussion/edit' => [
+			'discussion/save' => [
 				PrepareFields::class => [],
 			],
 		],
 		'get' => [
 			'subscriptions' => [
 				'Elgg\Discussions\Notifications::addGroupSubscribersToCommentOnDiscussionSubscriptions' => [],
+			],
+		],
+		'permissions_check:comment' => [
+			'object' => [
+				'Elgg\Discussions\Permissions::preventCommentOnClosedDiscussion' => [],
 			],
 		],
 		'prepare' => [
@@ -151,19 +148,12 @@ return [
 	'notifications' => [
 		'object' => [
 			'discussion' => [
-				'create' => [
-					CreateDiscussionEventHandler::class => [],
-				],
-				'mentions' => [
-					\Elgg\Notifications\Handlers\Mentions::class => [],
-				],
+				'create' => CreateDiscussionEventHandler::class,
+				'mentions' => \Elgg\Notifications\MentionsEventHandler::class,
 			],
 		],
 	],
 	'view_extensions' => [
-		'forms/discussion/edit' => [
-			'discussion/auto_close' => ['priority' => 400],
-		],
 		'groups/edit/settings' => [
 			'discussion/groups/settings' => [],
 		],
