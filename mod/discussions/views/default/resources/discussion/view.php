@@ -1,17 +1,14 @@
 <?php
 
+elgg_deprecated_notice("The resource view 'discussion/view' has been deprecated", '7.1');
+
 $guid = (int) elgg_extract('guid', $vars);
+$entity = elgg_entity_gatekeeper($guid, 'object', 'discussion');
 
-elgg_entity_gatekeeper($guid, 'object', 'discussion');
+elgg_push_entity_breadcrumbs($entity);
 
-$topic = get_entity($guid);
-
-elgg_push_entity_breadcrumbs($topic);
-
-$content = elgg_view_entity($topic);
-
-echo elgg_view_page($topic->getDisplayName(), [
-	'content' => $content,
-	'entity' => $topic,
+echo elgg_view_page($entity->getDisplayName(), [
+	'content' => elgg_view_entity($entity),
+	'entity' => $entity,
 	'filter_id' => 'discussion/view',
 ]);

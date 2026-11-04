@@ -17,9 +17,8 @@ return [
 		[
 			'type' => 'object',
 			'subtype' => 'messages',
-			'class' => 'ElggMessage',
+			'class' => \ElggMessage::class,
 			'capabilities' => [
-				'commentable' => false,
 				'searchable' => true,
 			],
 		],
@@ -90,7 +89,9 @@ return [
 	'notifications' => [
 		'object' => [
 			'messages' => [
-				'send' => SendMessageHandler::class,
+				'send' => [
+					SendMessageHandler::class => [],
+				],
 			],
 		],
 	],

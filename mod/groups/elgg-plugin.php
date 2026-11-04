@@ -24,7 +24,7 @@ return [
 			'type' => 'group',
 			'subtype' => 'group',
 			'capabilities' => [
-				'commentable' => false,
+				'river_emittable' => true,
 				'searchable' => true,
 				'likable' => true,
 				'restorable' => true,
@@ -109,6 +109,13 @@ return [
 				\Elgg\Router\Middleware\GroupPageOwnerCanEditGatekeeper::class,
 			],
 		],
+		'collection:user:user:group_requests' => [
+			'path' => '/groups/requests/{guid}',
+			'resource' => 'groups/requests',
+			'middleware' => [
+				\Elgg\Router\Middleware\GroupPageOwnerCanEditGatekeeper::class,
+			],
+		],
 		'add:group:group' => [
 			'path' => '/groups/add/{guid}',
 			'resource' => 'groups/add',
@@ -139,13 +146,6 @@ return [
 				\Elgg\Router\Middleware\GroupPageOwnerCanEditGatekeeper::class,
 			],
 		],
-		'requests:group:group' => [
-			'path' => '/groups/requests/{guid}',
-			'resource' => 'groups/requests',
-			'middleware' => [
-				\Elgg\Router\Middleware\GroupPageOwnerCanEditGatekeeper::class,
-			],
-		],
 		'settings:notification:groups' => [
 			'path' => '/settings/notifications/groups/{username}',
 			'resource' => 'settings/notifications/groups',
@@ -153,6 +153,7 @@ return [
 				\Elgg\Router\Middleware\Gatekeeper::class,
 				\Elgg\Router\Middleware\UserPageOwnerCanEditGatekeeper::class,
 			],
+			'use_logged_in' => true,
 		],
 	],
 	'widgets' => [
@@ -187,7 +188,7 @@ return [
 		'create:after' => [
 			'group' => [
 				'Elgg\Groups\Group::createAccessCollection' => [],
-				\Elgg\Notifications\CreateContentEventHandler::class => [],
+				\Elgg\Notifications\Events\CreateContent::class => [],
 			],
 		],
 		'default' => [
@@ -285,13 +286,19 @@ return [
 	'notifications' => [
 		'relationship' => [
 			'invited' => [
-				'create:after' => InviteMembershipEventHandler::class,
+				'create:after' => [
+					InviteMembershipEventHandler::class => [],
+				],
 			],
 			'member' => [
-				'add_membership' => AddMembershipEventHandler::class,
+				'add_membership' => [
+					AddMembershipEventHandler::class => [],
+				],
 			],
 			'membership_request' => [
-				'create:after' => RequestMembershipEventHandler::class,
+				'create:after' => [
+					RequestMembershipEventHandler::class => [],
+				],
 			],
 		],
 	],

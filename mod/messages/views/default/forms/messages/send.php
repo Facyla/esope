@@ -2,23 +2,20 @@
 /**
  * Compose message form
  *
- * @uses $vars['recipients']
+ * @uses $vars['recipient']
  * @uses $vars['subject']
  * @uses $vars['body']
  */
-
-$recipients = elgg_extract('recipients', $vars);
-$subject = elgg_extract('subject', $vars, '');
-$body = elgg_extract('body', $vars, '');
 
 $fields = [
 	[
 		'#type' => 'userpicker',
 		'#label' => elgg_echo('email:to'),
 		'#help' => elgg_echo('messages:to:help'),
-		'name' => 'recipients',
-		'values' => $recipients,
+		'name' => 'recipient',
+		'values' => elgg_extract('recipient', $vars),
 		'limit' => 1,
+		'save_as_array' => false,
 		'required' => true,
 		'only_friends' => (bool) elgg_get_plugin_setting('friends_only', 'messages'),
 	],
@@ -26,14 +23,14 @@ $fields = [
 		'#type' => 'text',
 		'#label' => elgg_echo('messages:title'),
 		'name' => 'subject',
-		'value' => $subject,
+		'value' => elgg_extract('subject', $vars, ''),
 		'required' => true,
 	],
 	[
 		'#type' => 'longtext',
 		'#label' => elgg_echo('messages:message'),
 		'name' => 'body',
-		'value' => $body,
+		'value' => elgg_extract('body', $vars, ''),
 		'required' => true,
 		'editor_type' => 'simple',
 	],

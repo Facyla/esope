@@ -25,8 +25,9 @@ echo elgg_view_field([
 	'id' => 'groups-membership',
 	'value' => $membership,
 	'options_values' => [
-		ACCESS_PRIVATE => elgg_echo('groups:access:private'),
-		ACCESS_PUBLIC => elgg_echo('groups:access:public'),
+		\ElggGroup::MEMBERSHIP_PUBLIC => elgg_echo('groups:access:public'),
+		\ElggGroup::MEMBERSHIP_CLOSED => elgg_echo('groups:access:private'),
+		\ElggGroup::MEMBERSHIP_INVITE_ONLY => elgg_echo('groups:access:invite_only'),
 	],
 ]);
 
@@ -106,7 +107,7 @@ if ($show_content_default_access) {
 }
 
 // group owner transfer
-if ($show_group_owner_transfer && $entity instanceof \ElggGroup && ($entity->getMembers(['count' => true]) > 1) && ($owner_guid == elgg_get_logged_in_user_guid() || elgg_is_admin_logged_in())) {
+if ($show_group_owner_transfer && $entity instanceof \ElggGroup && ($entity->getMembers(['count' => true]) > 1) && ($owner_guid === elgg_get_logged_in_user_guid() || elgg_is_admin_logged_in())) {
 	$owner_guid_options = [
 		'#type' => 'userpicker',
 		'#label' => elgg_echo('groups:owner'),
@@ -114,6 +115,7 @@ if ($show_group_owner_transfer && $entity instanceof \ElggGroup && ($entity->get
 		'value' => $owner_guid,
 		'placeholder' => elgg_echo('groups:owner:placeholder'),
 		'limit' => 1,
+		'save_as_array' => false,
 		'match_on' => 'group_members',
 		'show_friends' => false,
 		'options' => [
@@ -121,7 +123,7 @@ if ($show_group_owner_transfer && $entity instanceof \ElggGroup && ($entity->get
 		],
 	];
 	
-	if ($owner_guid == elgg_get_logged_in_user_guid()) {
+	if ($owner_guid === elgg_get_logged_in_user_guid()) {
 		$owner_guid_options['#help'] = elgg_echo('groups:owner:warning');
 	}
 	

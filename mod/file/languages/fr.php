@@ -22,9 +22,6 @@ return array(
 	'collection:object:file' => 'Fichiers',
 	'list:object:file:no_results' => 'Aucun fichier trouvé',
 	
-	'file:upgrade:2022092801:title' => 'Déplacer des fichiers',
-	'file:upgrade:2022092801:description' => 'Déplace les fichiers téléchargés qui utilisent le plugin "file" vers le dossier de l\'entité du fichier au lieu du dossier de l\'entité propriétaire.',
-	
 	'collection:object:file:all' => "Tous les fichiers du site",
 	'collection:object:file:owner' => "Fichiers de %s",
 	'collection:object:file:friends' => "Fichiers des contacts",
@@ -100,7 +97,6 @@ Afficher et commenter le fichier :
 	 * Error messages
 	 */
 
-	'file:none' => "Aucun fichier.", // @todo remove in Elgg 7.0
 	'file:uploadfailed' => "Désolé, votre fichier n'a pas pu être enregistré.",
 	'file:noaccess' => "Vous n'avez pas la permission de modifier ce fichier",
 	'file:cannotload' => "Une erreur s'est produite lors de l'envoi du fichier",

@@ -29,7 +29,6 @@ class Seeder extends Seed {
 				$discussion = $this->createObject([
 					'subtype' => 'discussion',
 					'container_guid' => $this->getRandomGroup()->guid,
-					'status' => $this->getRandomStatus(),
 					'excerpt' => $this->faker()->sentence(),
 				]);
 			} catch (MaxAttemptsException $e) {
@@ -40,6 +39,8 @@ class Seeder extends Seed {
 			$this->createComments($discussion);
 			$this->createLikes($discussion);
 
+			$discussion->setStatus($this->getRandomStatus());
+			
 			elgg_create_river_item([
 				'action_type' => 'create',
 				'subject_guid' => $discussion->owner_guid,
@@ -81,7 +82,7 @@ class Seeder extends Seed {
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	public static function getType() : string {
 		return 'discussion';
@@ -99,7 +100,7 @@ class Seeder extends Seed {
 	}
 	
 	/**
-	 * {@inheritDoc}
+	 * {@inheritdoc}
 	 */
 	protected function getCountOptions() : array {
 		return [
