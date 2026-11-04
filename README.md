@@ -72,13 +72,14 @@ Les versions d'ESOPE suivent la politique de versions de Elgg, avec au moins le 
 * Région Rhône-Alpes (via le projet FormaVia)
 * Inria
 * Cartier International
+* LINAGORA
 
 
 ## Contenu de la plateforme
 * Elgg core + plugins associés
 * Traduction FR intégrale
-* De nombreux plugins communautaires vérifiés (disponibles séparemment auprès de leurs auteurs respectifs)
-* De nombreux plugins spécifiques (disponibles via ESOPE ou dans un repository spécifiques de https://github.com/Facyla )
+* Des plugins communautaires vérifiés (disponibles séparemment auprès de leurs auteurs respectifs)
+* Des plugins spécifiques (disponibles via ESOPE ou dans un repository spécifiques de https://github.com/Facyla )
 
 
 
