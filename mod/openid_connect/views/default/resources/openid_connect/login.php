@@ -27,23 +27,25 @@ if (!elgg_is_logged_in()) {
 			error_log("DEBUG OIDC : failed creating new client");
 			openid_connect_forward();
 		}
-		/*
-		$scope = elgg_get_plugin_setting('scope', 'openid_connect');
-		$scope = string_to_tag_array($scope);
-		*/
-		$scope = array('profile', 'email', 'uid', 'obmDomain', 'mailBox', 'homeDirectory', 'givenName', 'sn', 'displayName', 'cn');
+		// Scopes : utiliser le setting configuré, sinon un défaut propre supporté par le provider
+		$scope_setting = elgg_get_plugin_setting('scope', 'openid_connect');
+		$scope = !empty($scope_setting)
+			? array_values(array_filter(preg_split('/[\s,]+/', trim($scope_setting))))
+			: ['profile', 'email'];
 		$oidc->addScope($scope);
 		//$oidc->setCertPath('/path/to/my.cert');
 		// Note : sometimes we get errors in response : whether redirect to login page, or retry a few times after a short delay?
-		//$successful_auth = $oidc->authenticate(); // Fatal errors in OpenID lib can cause fatal errors here, so wrap it to handle this properly
+		$auth_error = '';
 		try {
 			$successful_auth = $oidc->authenticate();
 		} catch (Exception $e) {
 			$successful_auth = false;
+			$auth_error = $e->getMessage();
 		}
 		if (!$successful_auth) {
 			// Classic use case is when tab was open a long time
-			//register_error(elgg_echo('openid_connect:invalidgrant', [$e->getMessage()]));
+			error_log('OIDC authentication failed: ' . $auth_error);
+			elgg_register_error_message(elgg_echo('openid_connect:invalidgrant'));
 			openid_connect_forward('openid_connect/login');
 		}
 

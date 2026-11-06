@@ -16,14 +16,17 @@ return [
 		'default:openid_connect' => [
 			'path' => '/openid_connect',
 			'resource' => 'openid_connect/index',
+			'walled' => false,
 		],
 		'default:openid_connect:login' => [
 			'path' => '/openid_connect/login',
 			'resource' => 'openid_connect/login',
+			'walled' => false,
 		],
 		'default:openid_connect:logout' => [
 			'path' => '/openid_connect/logout',
 			'resource' => 'openid_connect/logout',
+			'walled' => false,
 		],
 	],
 	'hooks' => [],
