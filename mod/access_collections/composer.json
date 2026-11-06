@@ -1,0 +1,18 @@
+{
+    "name": "facyla/access_collections",
+    "type": "elgg-plugin",
+    "description": "Add custom access collections based on profile types, admin-managed lists, or dynamic criteria. Requires profile_manager.",
+    "license": "GPL-2.0-only",
+    "require": {
+        "php": ">=8.3",
+        "elgg/elgg": "^7.0"
+    },
+    "conflict": {
+        "elgg/elgg": "<7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Facyla\\AccessCollections\\": "classes/Facyla/AccessCollections/"
+        }
+    }
+}
