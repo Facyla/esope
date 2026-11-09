@@ -30,9 +30,6 @@ class ConfigCacheFactory implements ConfigCacheFactoryInterface
     ) {
     }
 
-    /**
-     * @param-immediately-invoked-callable $callback
-     */
     public function cache(string $file, callable $callback): ConfigCacheInterface
     {
         $cache = new ConfigCache($file, $this->debug);
