@@ -51,10 +51,9 @@ if (!elgg_is_logged_in()) {
 
 		$name = $oidc->requestUserInfo('name');
 		$email = $oidc->requestUserInfo('email');
-		/* Pour ceux-là autres scopes à demander
-		*/
+		/* Pour ceux-là autres scopes à demander */
 		$username = $oidc->requestUserInfo('uid');
-		$obmDomain = $oidc->requestUserInfo('obmDomain'); // linagora.com
+		$obmDomain = $oidc->requestUserInfo('obmDomain');
 		$mailBox = $oidc->requestUserInfo('mailBox');
 		$homeDirectory = $oidc->requestUserInfo('homeDirectory'); // /home/IDENTIFIANT
 		$givenName = $oidc->requestUserInfo('givenName'); // prénom
@@ -88,32 +87,41 @@ if (!elgg_is_logged_in()) {
 				}
 
 				if (elgg_is_logged_in()) {
-					$user->login_source = "sso.linagora.com";
+					$user->login_source = "oidc_login";
 					$user->last_oidc_login = time();
 					if ($dev) error_log("DEV SSO LOGGED IN : $login_message");
 					if ($dev) elgg_register_success_message($login_message);
 					// Add other data from LDAP / OIDC
 
-					$access_token = $oidc->getAccessToken();
-					$id_token = $oidc->getIdToken();
-					if ($dev) error_log("DEV SSO accessToken : $access_token");
-					if ($dev) error_log("DEV SSO idToken : $id_token");
-					$access_token_data = explode('.', $access_token);
-					// 1ère partie : entête JWT
-					$token_jwt = base64_decode($access_token_data[0]);
-					// 2e partie : contenu
-					$token_data = json_decode(base64_decode($access_token_data[1]));
-					// 3e partie : signature binaire
-					$token_signature = base64_decode($access_token_data[2]);
-					if ($dev) error_log("DEV SSO sid : " . print_r($token_data, true));
+					// Persister l'id_token (nécessaire pour le logout OIDC)
+					$user->oidc_id_token = $oidc->getIdToken();
+					// Persister l'access_token (pour la révocation au logout)
+					$user->oidc_access_token = $oidc->getAccessToken();
+					if ($dev) error_log("DEV SSO idToken persisted");
+					if ($dev) error_log("DEV SSO accessToken persisted");
 
-					// save sid token for later logout
-					if (isset($token_data->oidc_sid)) {
-						$user->oidc_sid = $token_data->sid;
+					// Extraire le 'sid' du payload de l'id_token (et non de l'access_token)
+					$id_token_payload = $oidc->getIdTokenPayload();
+					if (is_string($id_token_payload)) {
+						$id_token_payload = json_decode($id_token_payload);
 					}
+					if (is_object($id_token_payload) && isset($id_token_payload->sid)) {
+						$user->oidc_sid = $id_token_payload->sid;
+						if ($dev) error_log("DEV SSO sid from id_token payload: " . $id_token_payload->sid);
+					} else {
+						if ($dev) error_log("DEV SSO sid not found in id_token payload");
+					}
+
+					// Redirection post-login : uniquement vers une URL relative au site
+					// (le referer provient d'un en-tête client ; une URL externe serait
+					// une open-redirect). Le referer est consommé une seule fois.
 					$redirect = '';
-					if (elgg_get_session()->get('sso_referer')) {
-						$redirect = elgg_get_session()->get('sso_referer');
+					$sso_referer = elgg_get_session()->get('sso_referer');
+					elgg_get_session()->remove('sso_referer');
+					if (is_string($sso_referer) && $sso_referer !== ''
+						&& str_starts_with($sso_referer, '/')
+						&& !str_starts_with($sso_referer, '//')) {
+						$redirect = $sso_referer;
 					}
 					openid_connect_forward($redirect);
 
@@ -138,7 +146,7 @@ if (!elgg_is_logged_in()) {
 
 					$new_user->oidc_created = time();
 					$new_user->created_by_guid = elgg_get_site_entity()->guid;
-					$new_user->created_by_source = "sso.linagora.com";
+					$new_user->created_by_source = "oidc_login";
 					// Add other data from LDAP / OIDC
 
 					// Elgg 7: notify_user() is removed; mirror core actions/useradd.php notification

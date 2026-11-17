@@ -19,6 +19,6 @@ if (isset($_COOKIE['lemonldap'])) {
 	openid_connect_forward("{$url}openid_connect/login");
 }
 
-$html .= elgg_view('output/url', ['href' => "{$url}openid_connect/login", 'text' => elgg_echo('openid_connect:login'), 'class' => 'linagora_sso-login']);
+$html .= elgg_view('output/url', ['href' => "{$url}openid_connect/login", 'text' => elgg_echo('openid_connect:login'), 'class' => 'oidc-sso-login']);
 
 echo $html;

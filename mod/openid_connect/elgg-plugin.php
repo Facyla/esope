@@ -28,6 +28,11 @@ return [
 			'resource' => 'openid_connect/logout',
 			'walled' => false,
 		],
+		'default:openid_connect:logged_out' => [
+			'path' => '/openid_connect/logged_out',
+			'resource' => 'openid_connect/logged_out',
+			'walled' => false,
+		],
 	],
 	'hooks' => [],
 ];

@@ -20,7 +20,7 @@ if (isset($_COOKIE['lemonldap'])) {
 }
 
 $html .= '<h3>' . elgg_echo('openid_connect:login:sso') . '</h3>';
-$html .= elgg_view('output/url', ['href' => "{$url}openid_connect/login", 'text' => elgg_echo('openid_connect:login'), 'class' => 'linagora_sso-login']);
+$html .= elgg_view('output/url', ['href' => "{$url}openid_connect/login", 'text' => elgg_echo('openid_connect:login'), 'class' => 'oidc-sso-login']);
 $html .= '<hr />';
 $html .= '<h3>' . elgg_echo('openid_connect:login:local') . '</h3>';
 
